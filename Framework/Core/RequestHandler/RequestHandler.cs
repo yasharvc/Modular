@@ -1,6 +1,5 @@
 ﻿using Contracts;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
 
 namespace RequestHandler
@@ -16,12 +15,29 @@ namespace RequestHandler
 
 		public void GetRequestInformation()
 		{
-			var requestHeaders = Context.Request.Headers;//(HttpRequestHeaders)((DefaultHttpRequest)Context.Request).Headers;
-			RequestInformation.HostURL = requestHeaders.ContainsKey("HeaderHost") && requestHeaders["HeaderHost"].Count > 0 ? requestHeaders["HeaderHost"][0] : "";
-			RequestInformation.HeaderReferer = requestHeaders.ContainsKey("HeaderReferer") && requestHeaders["HeaderReferer"].Count > 0 ? requestHeaders["HeaderReferer"][0] : "";
-			RequestInformation.UrlRequestPart = RequestInformation.HeaderReferer.Substring(RequestInformation.HeaderReferer.IndexOf(RequestInformation.HostURL) + RequestInformation.HostURL.Length);
+			if (Context.Request.Headers is HeaderDictionary requestHeaders)
+				GetHeaderDictionaryHeaders(requestHeaders);
+			else
+				GetHttpRequestHeaders();
 		}
 
-		public bool IsRequestInformationEmpty() => RequestInformation.HostURL.Length == 0 && RequestInformation.HeaderReferer.Length == 0 && RequestInformation.UrlRequestPart.Length == 0;
+		private void GetHeaderDictionaryHeaders(HeaderDictionary requestHeaders)
+		{
+			RequestInformation.HeaderHost = requestHeaders.ContainsKey("HeaderHost") && requestHeaders["HeaderHost"].Count > 0 ? requestHeaders["HeaderHost"][0] : "";
+			RequestInformation.HeaderReferer = requestHeaders.ContainsKey("HeaderReferer") && requestHeaders["HeaderReferer"].Count > 0 ? requestHeaders["HeaderReferer"][0] : "";
+			var index = RequestInformation.HeaderReferer.IndexOf(RequestInformation.HeaderHost);
+			RequestInformation.UrlRequestPart = index >= 0 ? RequestInformation.HeaderReferer.Substring(index + RequestInformation.HeaderHost.Length) : RequestInformation.HeaderReferer;
+		}
+
+		private void GetHttpRequestHeaders()
+		{
+			var requestHeaders = (HttpRequestHeaders)Context.Request.Headers;
+			RequestInformation.HeaderHost = requestHeaders.HeaderHost;
+			RequestInformation.HeaderReferer = requestHeaders.HeaderReferer;
+			var index = RequestInformation.HeaderReferer.IndexOf(RequestInformation.HeaderHost);
+			RequestInformation.UrlRequestPart = index >= 0 ? RequestInformation.HeaderReferer.Substring(index + RequestInformation.HeaderHost.Length) : RequestInformation.HeaderReferer;
+		}
+
+		public bool IsRequestInformationEmpty() => RequestInformation.HeaderHost.Length == 0 && RequestInformation.HeaderReferer.Length == 0 && RequestInformation.UrlRequestPart.Length == 0;
 	}
 }
