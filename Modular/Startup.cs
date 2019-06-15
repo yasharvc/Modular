@@ -49,7 +49,22 @@ namespace Modular
 			app.UseStaticFiles();
 			app.UseCookiePolicy();
 
-			app.UseMvc();
+			app.UseMvcWithDefaultRoute();
+			app.Use(async (context, next) =>
+			{
+				await next();
+				if(context.Response.StatusCode == 404)
+				{
+					await Handle404(context, next);
+				}
+			});
+		}
+
+		private async Task Handle404(HttpContext context, Func<Task> next)
+		{
+			var res = new RequestHandler.RequestHandler(context);
+			res.GetRequestInformation();
+			await context.Response.WriteAsync(res.RequestInformation.UrlRequestPart);
 		}
 	}
 }
