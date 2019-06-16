@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Framework\Contracts\Contracts.csproj" />
+    <ProjectReference Include="..\Framework\Core\CoreCommons\CoreCommons.csproj" />
     <ProjectReference Include="..\Framework\Core\RequestHandler\RequestHandler.csproj" />
   </ItemGroup>
 

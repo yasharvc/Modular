@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RequestHandler\RequestHandler.csproj" />
+    <ProjectReference Include="..\..\RequestHandler\RequestHandler.csproj" />
   </ItemGroup>
 
 </Project>
