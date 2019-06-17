@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Modular
@@ -18,12 +19,10 @@ namespace Modular
 
 		public IConfiguration Configuration { get; }
 
-		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.Configure<CookiePolicyOptions>(options =>
 			{
-				// This lambda determines whether user consent for non-essential cookies is needed for a given request.
 				options.CheckConsentNeeded = context => true;
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
@@ -32,7 +31,6 @@ namespace Modular
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 		}
 
-		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 		{
 			if (env.IsDevelopment())
@@ -48,22 +46,23 @@ namespace Modular
 			app.UseCookiePolicy();
 
 			app.UseMvcWithDefaultRoute();
-			//app.Use(async (context, next) =>
-			//{
-			//	await next();
-			//	if(context.Response.StatusCode == 404)
-			//	{
-			//		await Handle404(context, next);
-			//	}
-			//});
+			app.Use(async (context, next) =>
+			{
+				await next();
+				if (context.Response.StatusCode == 404)
+				{
+					await Handle404(context, next);
+				}
+			});
 		}
 
-		//private async Task Handle404(HttpContext context, Func<Task> next)
-		//{
-		//	var res = new RequestHandler.RequestHandler(context);
-		//	res.GetRequestInformation();
-		//	context.Response.StatusCode = 200;
-		//	await context.Response.WriteAsync(res.RequestInformation.UrlRequestPart);
-		//}
+		private async Task Handle404(HttpContext context, Func<Task> next)
+		{
+			var res = new RequestHandler.RequestHandler(context);
+			var req = context.Request;
+			res.ParseRequestData();
+			context.Response.StatusCode = 200;
+			await context.Response.WriteAsync($"{res.ContentType} : {res.BodyString} = {res.Method}");//string.Join(",",form.Select(m => $"{m.Key} = {m.Value[0]}")));
+		}
 	}
 }

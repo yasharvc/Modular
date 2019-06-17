@@ -13,7 +13,6 @@ namespace Modular.Controllers
         {
             return View();
         }
-
 		[HttpPost]
 		public IActionResult Form(C1 test)
 		{
