@@ -1,13 +1,15 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Threading.Tasks;
 
-namespace Modular
+namespace TestWebApplication
 {
 	public class Startup
 	{
@@ -48,22 +50,6 @@ namespace Modular
 			app.UseCookiePolicy();
 
 			app.UseMvcWithDefaultRoute();
-			//app.Use(async (context, next) =>
-			//{
-			//	await next();
-			//	if(context.Response.StatusCode == 404)
-			//	{
-			//		await Handle404(context, next);
-			//	}
-			//});
 		}
-
-		//private async Task Handle404(HttpContext context, Func<Task> next)
-		//{
-		//	var res = new RequestHandler.RequestHandler(context);
-		//	res.GetRequestInformation();
-		//	context.Response.StatusCode = 200;
-		//	await context.Response.WriteAsync(res.RequestInformation.UrlRequestPart);
-		//}
 	}
 }

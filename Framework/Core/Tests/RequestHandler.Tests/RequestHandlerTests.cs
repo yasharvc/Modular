@@ -6,7 +6,7 @@ using Microsoft.Extensions.Primitives;
 namespace RequestHandler.Tests
 {
 	[TestClass]
-	public class RequestHandlerTest
+	public class RequestHandlerTests
 	{
 		[TestMethod]
 		public void Empty_HttpContext()
