@@ -5,7 +5,7 @@
 <div>
 	<button onclick="Ajax()" type="button">Ajax Test</button>
 </div>
-
+<div id="res"></div>
 <form action="/Test/form" method="put" enctype="multipart/form-data">
 	<input name="Name" type="text" />
 	<input name="Age" type="text" />
@@ -13,10 +13,11 @@
 </form>
 <script>
 	function Ajax() {
-		$.get({
+		$.post({
 			url: "/a/b/c",
+			data: {name:'یاشاز',age:32},
 			success: function (d) {
-				console.log(d);
+				$('#res').html(d);
 			}
 		});
 	}

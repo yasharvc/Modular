@@ -8,7 +8,5 @@ namespace RequestHandler.Tests
 	[TestClass]
 	public class RequestHelperTests
 	{
-		[TestMethod]
-		public void 
 	}
 }

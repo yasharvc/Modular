@@ -5,6 +5,7 @@ using CoreCommons;
 using CoreCommons.Enums;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
+using RequestHandler.RequestParser;
 
 namespace RequestHandler
 {
@@ -32,6 +33,7 @@ namespace RequestHandler
 		private void GetRequestParameters()
 		{
 			GetBodyString();
+			RequestParameters.AddRange(new QueryStringParser().Parse(Context.Request.QueryString.HasValue ? Context.Request.QueryString.Value : ""));
 			if (ContentType == ContentType.Multipart_Form_Data)
 			{
 				foreach (var form in Context.Request.Form)

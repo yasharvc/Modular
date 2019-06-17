@@ -62,7 +62,7 @@ namespace Modular
 			var req = context.Request;
 			res.ParseRequestData();
 			context.Response.StatusCode = 200;
-			await context.Response.WriteAsync($"{res.ContentType} : {res.BodyString} = {res.Method}");//string.Join(",",form.Select(m => $"{m.Key} = {m.Value[0]}")));
+			await context.Response.WriteAsync($"{res.ContentType} : {string.Join(" AND ",res.RequestParameters.Select(m => $"{m.Name} - {m.Value}"))} = {res.Method}");//string.Join(",",form.Select(m => $"{m.Key} = {m.Value[0]}")));
 		}
 	}
 }
