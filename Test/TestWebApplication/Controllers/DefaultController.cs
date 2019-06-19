@@ -2,7 +2,7 @@
 
 namespace TestWebApplication.Controllers
 {
-	public class DefaultController : Controller
+	public class DefaultController : FCOntroller
 	{
 		public class Test
 		{
@@ -19,5 +19,20 @@ namespace TestWebApplication.Controllers
 		{
 			return Content($"Age {test.Name} - {test.Age}");
 		}
+
+		public IActionResult Zest()
+		{
+			return Content($"My name is yashar");
+		}
+
+		public IActionResult ZestOfBitchi()
+		{
+			return Content($"My name is Zest of bitchi");
+		}
+	}
+
+	public class FCOntroller : Controller
+	{
+		public int x { get; set; }
 	}
 }

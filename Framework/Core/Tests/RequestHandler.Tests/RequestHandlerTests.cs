@@ -12,7 +12,7 @@ namespace RequestHandler.Tests
 		public void Empty_HttpContext()
 		{
 			RequestHandler d = new RequestHandler(GetEmptyContext());
-			d.GetRequestInformation();
+			d.ParseRequestData();
 			Assert.IsTrue(d.IsRequestInformationEmpty());
 		}
 
@@ -20,7 +20,7 @@ namespace RequestHandler.Tests
 		public void Just_HeaderHost()
 		{
 			RequestHandler d = new RequestHandler(GetContextWithHeaders("localhost:2929"));
-			d.GetRequestInformation();
+			d.ParseRequestData();
 
 			var expected = "localhost:2929";
 
@@ -33,7 +33,7 @@ namespace RequestHandler.Tests
 		public void HeaderHost_HeaderReferer()
 		{
 			RequestHandler d = new RequestHandler(GetContextWithHeaders("localhost:2929", "localhost:2929/a/b"));
-			d.GetRequestInformation();
+			d.ParseRequestData();
 
 			var expected = "localhost:2929";
 

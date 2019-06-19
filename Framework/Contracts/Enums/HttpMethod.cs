@@ -1,4 +1,4 @@
-﻿namespace CoreCommons.Enums
+﻿namespace Contracts.Enums
 {
 	public enum HttpMethod
 	{

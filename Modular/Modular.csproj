@@ -11,13 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\ControllerExecuter\ControllerExecuter.csproj" />
     <ProjectReference Include="..\Framework\Contracts\Contracts.csproj" />
     <ProjectReference Include="..\Framework\Core\CoreCommons\CoreCommons.csproj" />
     <ProjectReference Include="..\Framework\Core\RequestHandler\RequestHandler.csproj" />
+    <ProjectReference Include="..\Framework\Core\TypeConverter\TypeConverter.csproj" />
   </ItemGroup>
 
 </Project>

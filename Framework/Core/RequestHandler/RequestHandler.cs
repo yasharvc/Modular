@@ -13,7 +13,7 @@ namespace RequestHandler
 	{
 		public RequestInformation RequestInformation { get; } = new RequestInformation();
 		public ContentType ContentType { get; private set; } = ContentType.None;
-		public CoreCommons.Enums.HttpMethod Method { get; private set; } = CoreCommons.Enums.HttpMethod.GET;
+		public Contracts.Enums.HttpMethod Method { get; private set; } = Contracts.Enums.HttpMethod.GET;
 		HttpContext Context { get; set; }
 		public string BodyString { get; private set; } = "";
 		public List<RequestParameter> RequestParameters { get; set; } = new List<RequestParameter>();
@@ -52,34 +52,34 @@ namespace RequestHandler
 			switch(Context.Request.Method.ToLower())
 			{
 				case "post":
-					Method = CoreCommons.Enums.HttpMethod.POST;
+					Method = Contracts.Enums.HttpMethod.POST;
 					break;
 				case "get":
-					Method = CoreCommons.Enums.HttpMethod.GET;
+					Method = Contracts.Enums.HttpMethod.GET;
 					break;
 				case "put":
-					Method = CoreCommons.Enums.HttpMethod.PUT;
+					Method = Contracts.Enums.HttpMethod.PUT;
 					break;
 				case "delete":
-					Method = CoreCommons.Enums.HttpMethod.DELETE;
+					Method = Contracts.Enums.HttpMethod.DELETE;
 					break;
 				case "patch":
-					Method = CoreCommons.Enums.HttpMethod.PATCH;
+					Method = Contracts.Enums.HttpMethod.PATCH;
 					break;
 				case "head":
-					Method = CoreCommons.Enums.HttpMethod.HEAD;
+					Method = Contracts.Enums.HttpMethod.HEAD;
 					break;
 				case "options":
-					Method = CoreCommons.Enums.HttpMethod.OPTIONS;
+					Method = Contracts.Enums.HttpMethod.OPTIONS;
 					break;
 				case "trace":
-					Method = CoreCommons.Enums.HttpMethod.TRACE;
+					Method = Contracts.Enums.HttpMethod.TRACE;
 					break;
 				case "connect":
-					Method = CoreCommons.Enums.HttpMethod.CONNECT;
+					Method = Contracts.Enums.HttpMethod.CONNECT;
 					break;
 				default:
-					Method = CoreCommons.Enums.HttpMethod.GET;
+					Method = Contracts.Enums.HttpMethod.GET;
 					break;
 			}
 		}
@@ -124,8 +124,8 @@ namespace RequestHandler
 			var requestHeaders = (HttpRequestHeaders)Context.Request.Headers;
 			RequestInformation.HeaderHost = requestHeaders.HeaderHost;
 			RequestInformation.HeaderReferer = requestHeaders.HeaderReferer;
-			var index = RequestInformation.HeaderReferer.IndexOf(RequestInformation.HeaderHost);
-			RequestInformation.UrlRequestPart = index >= 0 ? RequestInformation.HeaderReferer.Substring(index + RequestInformation.HeaderHost.Length) : RequestInformation.HeaderReferer;
+			var index = RequestInformation.HeaderReferer?.IndexOf(RequestInformation.HeaderHost);
+			RequestInformation.UrlRequestPart = index.HasValue && index.Value >= 0 ? RequestInformation.HeaderReferer.Substring(index.Value + RequestInformation.HeaderHost.Length) : RequestInformation.HeaderReferer;
 		}
 
 		public bool IsRequestInformationEmpty() => RequestInformation.HeaderHost.Length == 0 && RequestInformation.HeaderReferer.Length == 0 && RequestInformation.UrlRequestPart.Length == 0;
