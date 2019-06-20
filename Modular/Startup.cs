@@ -75,11 +75,12 @@ namespace Modular
 				var routeData = Executer.GetRouteFor(req.Path);
 				res.ParseAdditionalParameters(routeData.GetQueryString(req.Path));
 				var actionResult = Executer.InvokeAction(res,req);
+				context.Response.StatusCode = 200;
 				await actionResult.ExecuteResultAsync(actionContext);
 			}
-			catch
+			catch(Exception ex)
 			{
-				context.Response.StatusCode = 200;
+				context.Response.StatusCode = 418;
 				await context.Response.WriteAsync($"{res.ContentType} : {string.Join(" AND ", res.RequestParameters.Select(m => $"{m.Name} - {m.Value}"))} = {res.Method}");//string.Join(",",form.Select(m => $"{m.Key} = {m.Value[0]}")));
 			}
 		}

@@ -30,7 +30,7 @@ namespace Contracts
 				fixedURL = $"{fixedURL}/";
 			}
 			string path = $"/{GetControllerName()}/{GetActionName()}/";
-			if (fixedURL.StartsWith(path))
+			if (fixedURL.StartsWith(path, StringComparison.OrdinalIgnoreCase))
 			{
 				return url.Substring(path.Length - (!haveFirstSlash ? 1 : 0) - (!haveLastSlash ? 1 : 0));
 			}

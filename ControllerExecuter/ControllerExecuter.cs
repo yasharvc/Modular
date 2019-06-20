@@ -27,8 +27,7 @@ namespace ControllerExecuter
 		public void ResolveRoutes()
 		{
 			var Types = Assembly.GetTypes().Where(m => m.IsSubclassOf(typeof(Controller)));
-			Console.ForegroundColor = ConsoleColor.Yellow;
-			foreach (var type in Assembly.GetTypes())
+			foreach (var type in Types)
 			{
 				MethodInfo[] methods = GetMethods(type);
 				foreach (var method in methods)
@@ -40,20 +39,30 @@ namespace ControllerExecuter
 		{
 			var routeData = GetRouteFor(request.Path);
 			var tempParameters = requestInformation.RequestParameters;
+			SortedDictionary<string, object> sortedParameter = new SortedDictionary<string, object>();
+			var i = 0;
 			foreach (var parameter in routeData.Parameters)
 			{
 				if (parameter.ParameterType.IsPrimitiveType())
 				{
 					var temp = tempParameters.Where(m => m.Name.Length == 0).OrderBy(m => m.Index);
-					if(temp.Count() > 0)
-					{
-						var first = temp.First();
-						tempParameters.Remove(first);
+					if(temp.Count() == 0)
+					{ 
+						temp = tempParameters.Where(m => m.Name.Equals(parameter.Name, StringComparison.OrdinalIgnoreCase)).OrderBy(m => m.Name);
 					}
-
+					if(temp.Count() > 0)
+						SetPrimitiveParameter(parameter.ParameterType, tempParameters, sortedParameter, i, temp);
 				}
+				i++;
 			}
-			return (ActionResult)routeData.Controller.GetMethod(routeData.GetActionName()).Invoke(Activator.CreateInstance(routeData.Controller), new object[] { });
+			return (ActionResult)routeData.Controller.GetMethod(routeData.GetActionName()).Invoke(Activator.CreateInstance(routeData.Controller), sortedParameter.Values.ToArray());
+		}
+
+		private void SetPrimitiveParameter(Type parameterType, List<RequestParameter> tempParameters, SortedDictionary<string, object> sortedParameter, int i, IOrderedEnumerable<RequestParameter> temp)
+		{
+			var first = temp.First();
+			tempParameters.Remove(first);
+			sortedParameter[i.ToString()] = Convert.ChangeType(first.Value, parameterType);
 		}
 
 		private void AddMethodToRoute(Type type, MethodInfo method)

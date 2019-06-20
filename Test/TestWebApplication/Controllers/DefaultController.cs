@@ -31,7 +31,7 @@ namespace TestWebApplication.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult GetInfo(int id, string name)
+		public IActionResult GetInfo(int id, string name = "Yashar")
 		{
 			return Content($"My name is {name} and my id is {id}");
 		}
