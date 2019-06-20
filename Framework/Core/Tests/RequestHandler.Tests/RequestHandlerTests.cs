@@ -11,7 +11,7 @@ namespace RequestHandler.Tests
 		[TestMethod]
 		public void Empty_HttpContext()
 		{
-			RequestHandler d = new RequestHandler(GetEmptyContext());
+			RequestInformation d = new RequestInformation(GetEmptyContext());
 			d.ParseRequestData();
 			Assert.IsTrue(d.IsRequestInformationEmpty());
 		}
@@ -19,27 +19,27 @@ namespace RequestHandler.Tests
 		[TestMethod]
 		public void Just_HeaderHost()
 		{
-			RequestHandler d = new RequestHandler(GetContextWithHeaders("localhost:2929"));
+			RequestInformation d = new RequestInformation(GetContextWithHeaders("localhost:2929"));
 			d.ParseRequestData();
 
 			var expected = "localhost:2929";
 
-			Assert.AreEqual(expected, d.RequestInformation.HeaderHost);
-			Assert.AreEqual("", d.RequestInformation.HeaderReferer);
-			Assert.AreEqual("", d.RequestInformation.UrlRequestPart);
+			Assert.AreEqual(expected, d.RequestURLInformation.HeaderHost);
+			Assert.AreEqual("", d.RequestURLInformation.HeaderReferer);
+			Assert.AreEqual("", d.RequestURLInformation.UrlRequestPart);
 		}
 
 		[TestMethod]
 		public void HeaderHost_HeaderReferer()
 		{
-			RequestHandler d = new RequestHandler(GetContextWithHeaders("localhost:2929", "localhost:2929/a/b"));
+			RequestInformation d = new RequestInformation(GetContextWithHeaders("localhost:2929", "localhost:2929/a/b"));
 			d.ParseRequestData();
 
 			var expected = "localhost:2929";
 
-			Assert.AreEqual(expected, d.RequestInformation.HeaderHost);
-			Assert.AreEqual("localhost:2929/a/b", d.RequestInformation.HeaderReferer);
-			Assert.AreEqual("/a/b", d.RequestInformation.UrlRequestPart);
+			Assert.AreEqual(expected, d.RequestURLInformation.HeaderHost);
+			Assert.AreEqual("localhost:2929/a/b", d.RequestURLInformation.HeaderReferer);
+			Assert.AreEqual("/a/b", d.RequestURLInformation.UrlRequestPart);
 		}
 
 		private HttpContext GetEmptyContext()

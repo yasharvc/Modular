@@ -1,5 +1,8 @@
 ﻿using Contracts;
+using CoreCommons;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RequestHandler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +36,26 @@ namespace ControllerExecuter
 			}
 		}
 
+		public ActionResult InvokeAction(RequestInformation requestInformation, HttpRequest request)
+		{
+			var routeData = GetRouteFor(request.Path);
+			var tempParameters = requestInformation.RequestParameters;
+			foreach (var parameter in routeData.Parameters)
+			{
+				if (parameter.ParameterType.IsPrimitiveType())
+				{
+					var temp = tempParameters.Where(m => m.Name.Length == 0).OrderBy(m => m.Index);
+					if(temp.Count() > 0)
+					{
+						var first = temp.First();
+						tempParameters.Remove(first);
+					}
+
+				}
+			}
+			return (ActionResult)routeData.Controller.GetMethod(routeData.GetActionName()).Invoke(Activator.CreateInstance(routeData.Controller), new object[] { });
+		}
+
 		private void AddMethodToRoute(Type type, MethodInfo method)
 		{
 			//TODO: Get Controller Methods
@@ -50,10 +73,11 @@ namespace ControllerExecuter
 			});
 		}
 
-		private static MethodInfo[] GetMethods(Type type)
+		private MethodInfo[] GetMethods(Type type)
 		{
 			return type.GetMethods(BindingFlags.DeclaredOnly |
-										BindingFlags.Instance | BindingFlags.Public);
+								   BindingFlags.Instance     |
+								   BindingFlags.Public);
 		}
 	}
 }

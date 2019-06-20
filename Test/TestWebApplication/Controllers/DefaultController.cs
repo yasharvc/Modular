@@ -29,6 +29,12 @@ namespace TestWebApplication.Controllers
 		{
 			return Content($"My name is Zest of bitchi");
 		}
+
+		[HttpGet]
+		public IActionResult GetInfo(int id, string name)
+		{
+			return Content($"My name is {name} and my id is {id}");
+		}
 	}
 
 	public class FCOntroller : Controller

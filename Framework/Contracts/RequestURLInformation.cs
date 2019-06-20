@@ -2,7 +2,7 @@
 
 namespace Contracts
 {
-	public class RequestInformation
+	public class RequestURLInformation
 	{
 		public string HeaderHost { get; set; }
 		public string HeaderReferer { get; set; }

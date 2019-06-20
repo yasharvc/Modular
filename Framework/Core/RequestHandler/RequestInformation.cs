@@ -9,15 +9,15 @@ using RequestHandler.RequestParser;
 
 namespace RequestHandler
 {
-	public class RequestHandler
+	public class RequestInformation
 	{
-		public RequestInformation RequestInformation { get; } = new RequestInformation();
+		public RequestURLInformation RequestURLInformation { get; } = new RequestURLInformation();
 		public ContentType ContentType { get; private set; } = ContentType.None;
 		public Contracts.Enums.HttpMethod Method { get; private set; } = Contracts.Enums.HttpMethod.GET;
 		HttpContext Context { get; set; }
 		public string BodyString { get; private set; } = "";
 		public List<RequestParameter> RequestParameters { get; set; } = new List<RequestParameter>();
-		public RequestHandler(HttpContext context)
+		public RequestInformation(HttpContext context)
 		{
 			Context = context;
 		}
@@ -28,6 +28,23 @@ namespace RequestHandler
 			GetHttpMethod();
 			GetRequestInformation();
 			GetRequestParameters();
+		}
+
+		public void ParseAdditionalParameters(string urlAdditionalPart)
+		{
+			var firstPartWithoutQueryString = urlAdditionalPart.Split('?')[0];
+			var parts = firstPartWithoutQueryString.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+			var i = 0;
+			foreach (var part in parts)
+			{
+				RequestParameters.Add(new RequestParameter
+				{
+					Name = "",
+					Index = i.ToString(),
+					Value = part
+				});
+				i++;
+			}
 		}
 
 		private void GetRequestParameters()
@@ -113,21 +130,21 @@ namespace RequestHandler
 
 		private void GetHeaderDictionaryHeaders(HeaderDictionary requestHeaders)
 		{
-			RequestInformation.HeaderHost = requestHeaders.ContainsKey("HeaderHost") && requestHeaders["HeaderHost"].Count > 0 ? requestHeaders["HeaderHost"][0] : "";
-			RequestInformation.HeaderReferer = requestHeaders.ContainsKey("HeaderReferer") && requestHeaders["HeaderReferer"].Count > 0 ? requestHeaders["HeaderReferer"][0] : "";
-			var index = RequestInformation.HeaderReferer.IndexOf(RequestInformation.HeaderHost);
-			RequestInformation.UrlRequestPart = index >= 0 ? RequestInformation.HeaderReferer.Substring(index + RequestInformation.HeaderHost.Length) : RequestInformation.HeaderReferer;
+			RequestURLInformation.HeaderHost = requestHeaders.ContainsKey("HeaderHost") && requestHeaders["HeaderHost"].Count > 0 ? requestHeaders["HeaderHost"][0] : "";
+			RequestURLInformation.HeaderReferer = requestHeaders.ContainsKey("HeaderReferer") && requestHeaders["HeaderReferer"].Count > 0 ? requestHeaders["HeaderReferer"][0] : "";
+			var index = RequestURLInformation.HeaderReferer.IndexOf(RequestURLInformation.HeaderHost);
+			RequestURLInformation.UrlRequestPart = index >= 0 ? RequestURLInformation.HeaderReferer.Substring(index + RequestURLInformation.HeaderHost.Length) : RequestURLInformation.HeaderReferer;
 		}
 
 		private void GetHttpRequestHeaders()
 		{
 			var requestHeaders = (HttpRequestHeaders)Context.Request.Headers;
-			RequestInformation.HeaderHost = requestHeaders.HeaderHost;
-			RequestInformation.HeaderReferer = requestHeaders.HeaderReferer;
-			var index = RequestInformation.HeaderReferer?.IndexOf(RequestInformation.HeaderHost);
-			RequestInformation.UrlRequestPart = index.HasValue && index.Value >= 0 ? RequestInformation.HeaderReferer.Substring(index.Value + RequestInformation.HeaderHost.Length) : RequestInformation.HeaderReferer;
+			RequestURLInformation.HeaderHost = requestHeaders.HeaderHost;
+			RequestURLInformation.HeaderReferer = requestHeaders.HeaderReferer;
+			var index = RequestURLInformation.HeaderReferer?.IndexOf(RequestURLInformation.HeaderHost);
+			RequestURLInformation.UrlRequestPart = index.HasValue && index.Value >= 0 ? RequestURLInformation.HeaderReferer.Substring(index.Value + RequestURLInformation.HeaderHost.Length) : RequestURLInformation.HeaderReferer;
 		}
 
-		public bool IsRequestInformationEmpty() => RequestInformation.HeaderHost.Length == 0 && RequestInformation.HeaderReferer.Length == 0 && RequestInformation.UrlRequestPart.Length == 0;
+		public bool IsRequestInformationEmpty() => RequestURLInformation.HeaderHost.Length == 0 && RequestURLInformation.HeaderReferer.Length == 0 && RequestURLInformation.UrlRequestPart.Length == 0;
 	}
 }

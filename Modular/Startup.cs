@@ -68,12 +68,13 @@ namespace Modular
 			var Executer = CreateControllerExecuter();
 			Executer.ResolveRoutes();
 			AddAdditionalInformationToContext(context);
-			RequestHandler.RequestHandler res = GetRequestHandler(context);
+			RequestHandler.RequestInformation res = GetRequestHandler(context);
 
 			try
 			{
 				var routeData = Executer.GetRouteFor(req.Path);
-				var actionResult = (ActionResult)routeData.Controller.GetMethod(routeData.GetActionName()).Invoke(Activator.CreateInstance(routeData.Controller), new object[] { });
+				res.ParseAdditionalParameters(routeData.GetQueryString(req.Path));
+				var actionResult = Executer.InvokeAction(res,req);
 				await actionResult.ExecuteResultAsync(actionContext);
 			}
 			catch
@@ -85,9 +86,9 @@ namespace Modular
 
 		#region Clean Code
 
-		private RequestHandler.RequestHandler GetRequestHandler(HttpContext context)
+		private RequestHandler.RequestInformation GetRequestHandler(HttpContext context)
 		{
-			var res = new RequestHandler.RequestHandler(context);
+			var res = new RequestHandler.RequestInformation(context);
 			res.ParseRequestData();
 			return res;
 		}
