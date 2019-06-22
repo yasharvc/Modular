@@ -24,7 +24,7 @@ namespace TestWebApplication.Controllers
 		{
 			return Content($"My name is yashar");
 		}
-
+		[HttpPut]
 		public IActionResult ZestOfBitchi()
 		{
 			return Content($"My name is Zest of bitchi");

@@ -68,18 +68,21 @@ namespace ControllerExecuter
 		private void AddMethodToRoute(Type type, MethodInfo method)
 		{
 			//TODO: Get Controller Methods
+			var actionMethods = GetActionMethods(method);
 			Routes.Add(new RouteInformation
 			{
-				AllowedMethods = new List<Contracts.Enums.HttpMethod>
-							{
-								Contracts.Enums.HttpMethod.GET,
-								Contracts.Enums.HttpMethod.POST
-							},
+				AllowedMethods = actionMethods,
 				Controller = type,
 				Parameters = method.GetParameters().ToList(),
 				Path = $"/{type.Name.Replace("Controller", "", StringComparison.OrdinalIgnoreCase)}/{method.Name}/",
 				Prefix = $""
 			});
+		}
+
+		private List<Contracts.Enums.HttpMethod> GetActionMethods(MethodInfo method)
+		{
+			var res = new List<Contracts.Enums.HttpMethod>();
+			if(method.GetCustomAttribute(typeof(HttpGetAttribute)) != null)
 		}
 
 		private MethodInfo[] GetMethods(Type type)
