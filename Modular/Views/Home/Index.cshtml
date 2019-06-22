@@ -3,7 +3,10 @@
 }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <div>
-	<button onclick="Ajax()" type="button">Ajax Test</button>
+	<button onclick="post()" type="button">Post Test</button>
+	<button onclick="put()" type="button">Put Test</button>
+	<button onclick="get()" type="button">Get Test</button>
+	<button onclick="ZestOfBitchi()" type="button">ZestOfBitchi</button>
 </div>
 <div id="res"></div>
 <form action="/Default/GetInfo" method="put" enctype="application/x-www-form-urlencoded">
@@ -12,12 +15,41 @@
 	<button type="submit">Go!</button>
 </form>
 <script>
-	function Ajax() {
+	function post() {
 		$.post({
 			url: "/Default/GetInfo",
 			data: {name:'یاشاز',id:32},
 			success: function (d) {
 				$('#res').html(d);
+			}
+		});
+	}
+	function get() {
+		$.get({
+			url: "/Default/GetInfo",
+			data: { name: 'یاشاز', id: 32 },
+			success: function (d) {
+				$('#res').html(d);
+			}
+		});
+	}
+	function put() {
+		$.ajax({
+			url: '/Default/GetInfo',
+			type: 'put',
+			data: { name: 'sdsdfs', id: 5151 },
+			success: function (result) {
+				$('#res').html(result);
+			}
+		});
+	}
+
+	function ZestOfBitchi() {
+		$.ajax({
+			url: '/Default/ZestOfBitchi',
+			type: 'OPTIONS',
+			success: function (result) {
+				$('#res').html(result);
 			}
 		});
 	}
