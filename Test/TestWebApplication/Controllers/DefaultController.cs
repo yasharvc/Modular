@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace TestWebApplication.Controllers
 {
@@ -36,6 +37,8 @@ namespace TestWebApplication.Controllers
 		{
 			return Content($"My name is {name} and my id is {id}");
 		}
+
+		public IActionResult GuidTest(Guid guid) => Content($"guid was {guid.ToString()}");
 	}
 
 	public class FCOntroller : Controller

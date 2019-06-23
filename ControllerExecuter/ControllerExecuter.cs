@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Contracts.Exceptions.Application;
+using Contracts.Exceptions.System;
 using CoreCommons;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -47,20 +48,36 @@ namespace ControllerExecuter
 				foreach (var parameter in routeData.Parameters)
 				{
 					if (parameter.ParameterType.IsPrimitiveType())
+						GetPrimitiveParameter(tempParameters, sortedParameter, i, parameter);
+					else if (parameter.ParameterType == typeof(Guid))
+						sortedParameter[i.ToString()] = new Guid(GetParameter(tempParameters, parameter).First().Value.ToString());
+					else
 					{
-						var temp = tempParameters.Where(m => m.Name.Length == 0).OrderBy(m => m.Index);
-						if (temp.Count() == 0)
-						{
-							temp = tempParameters.Where(m => m.Name.Equals(parameter.Name, StringComparison.OrdinalIgnoreCase)).OrderBy(m => m.Name);
-						}
-						if (temp.Count() > 0)
-							SetPrimitiveParameter(parameter.ParameterType, tempParameters, sortedParameter, i, temp);
+						//Type changer
 					}
 					i++;
 				}
 				return (ActionResult)routeData.Controller.GetMethod(routeData.GetActionName()).Invoke(Activator.CreateInstance(routeData.Controller), sortedParameter.Values.ToArray());
 			}
 			throw new MethodNotAllowedException(routeData.GetControllerName(), routeData.GetActionName(), requestInformation.Method);
+		}
+
+		private void GetPrimitiveParameter(List<RequestParameter> tempParameters, SortedDictionary<string, object> sortedParameter, int i, ParameterInfo parameter)
+		{
+			IOrderedEnumerable<RequestParameter> temp = GetParameter(tempParameters, parameter);
+			SetPrimitiveParameter(parameter.ParameterType, tempParameters, sortedParameter, i, temp);
+		}
+
+		private static IOrderedEnumerable<RequestParameter> GetParameter(List<RequestParameter> tempParameters, ParameterInfo parameter)
+		{
+			var temp = tempParameters.Where(m => m.Name.Length == 0).OrderBy(m => m.Index);
+			if (temp.Count() == 0)
+			{
+				temp = tempParameters.Where(m => m.Name.Equals(parameter.Name, StringComparison.OrdinalIgnoreCase)).OrderBy(m => m.Name);
+			}
+			if (temp.Count() > 0)
+				return temp;
+			throw new ParameterNotFoundException();
 		}
 
 		private void SetPrimitiveParameter(Type parameterType, List<RequestParameter> tempParameters, SortedDictionary<string, object> sortedParameter, int i, IOrderedEnumerable<RequestParameter> temp)

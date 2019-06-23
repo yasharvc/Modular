@@ -6,6 +6,7 @@
 	<button onclick="post()" type="button">Post Test</button>
 	<button onclick="put()" type="button">Put Test</button>
 	<button onclick="get()" type="button">Get Test</button>
+	<button onclick="guid()" type="button">GUID Test</button>
 	<button onclick="ZestOfBitchi()" type="button">ZestOfBitchi</button>
 </div>
 <div id="res"></div>
@@ -28,6 +29,17 @@
 		$.get({
 			url: "/Default/GetInfo",
 			data: { name: 'یاشاز', id: 32 },
+			success: function (d) {
+				$('#res').html(d);
+			}
+		});
+	}
+	function guid() {
+		$.get({
+			url: "/Default/guidtest",
+			data: {
+				guid: 'a249e147-e4b2-4271-9bf7-44cd0fd37e7e'
+			},
 			success: function (d) {
 				$('#res').html(d);
 			}
