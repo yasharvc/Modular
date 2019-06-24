@@ -53,7 +53,7 @@ namespace ControllerExecuter
 						sortedParameter[i.ToString()] = new Guid(GetParameter(tempParameters, parameter).First().Value.ToString());
 					else
 					{
-						//Type changer
+						sortedParameter[i.ToString()] = GetComplexParameter(parameter,tempParameters);
 					}
 					i++;
 				}
@@ -61,6 +61,9 @@ namespace ControllerExecuter
 			}
 			throw new MethodNotAllowedException(routeData.GetControllerName(), routeData.GetActionName(), requestInformation.Method);
 		}
+
+		private object GetComplexParameter(ParameterInfo parameter, List<RequestParameter> tempParameters) =>
+			parameter.CastToType(tempParameters);
 
 		private void GetPrimitiveParameter(List<RequestParameter> tempParameters, SortedDictionary<string, object> sortedParameter, int i, ParameterInfo parameter)
 		{
