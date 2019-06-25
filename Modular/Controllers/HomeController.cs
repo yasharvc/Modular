@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Modular.Controllers
 {
@@ -19,5 +21,15 @@ namespace Modular.Controllers
 			var request = HttpContext.Request;
 			return Content($"Your name is {test.Name} with age {test.Age}");
 		}
-    }
+
+		public IActionResult SimpleClass(C1 data)
+		{
+			return Content($"{data.Name}");
+		}
+
+		public IActionResult ListOfClass(List<C1> data)
+		{
+			return Content($"{string.Join(",", data.Select(m => $"{m.Name} - {m.Age}"))}");
+		}
+	}
 }

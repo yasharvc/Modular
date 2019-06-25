@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace TestWebApplication.Controllers
 {
@@ -39,6 +41,16 @@ namespace TestWebApplication.Controllers
 		}
 
 		public IActionResult GuidTest(Guid guid) => Content($"guid was {guid.ToString()}");
+
+		public IActionResult SimpleClass(Test data)
+		{
+			return Content($"{data.Name}");
+		}
+
+		public IActionResult ListOfClass(List<Test> data)
+		{
+			return Content($"{string.Join(",",data.Select(m => $"{m.Name} - {m.Age}"))}");
+		}
 	}
 
 	public class FCOntroller : Controller

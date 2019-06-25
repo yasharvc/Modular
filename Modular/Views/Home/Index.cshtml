@@ -1,5 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "Index";
 }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <div>
@@ -8,6 +8,7 @@
 	<button onclick="get()" type="button">Get Test</button>
 	<button onclick="guid()" type="button">GUID Test</button>
 	<button onclick="ZestOfBitchi()" type="button">ZestOfBitchi</button>
+	<button onclick="GetWithClass()" type="button">Get With Class Test</button>
 </div>
 <div id="res"></div>
 <form action="/Default/GetInfo" method="put" enctype="application/x-www-form-urlencoded">
@@ -19,7 +20,7 @@
 	function post() {
 		$.post({
 			url: "/Default/GetInfo",
-			data: {name:'یاشاز',id:32},
+			data: { name: 'یاشاز', id: 32 },
 			success: function (d) {
 				$('#res').html(d);
 			}
@@ -29,6 +30,29 @@
 		$.get({
 			url: "/Default/GetInfo",
 			data: { name: 'یاشاز', id: 32 },
+			success: function (d) {
+				$('#res').html(d);
+			}
+		});
+	}
+	function GetWithClass() {
+
+		$.get({
+			url: "/Default/ListOfClass",
+			data: { data:
+				[
+				{ name: 'یاشاز', id: 32 },
+				{ name: 'Samad', id: 1 },
+				{ name: 'Test', id: 3 },
+				{ name: 'sad', id: 4 },
+				{ name: 'یاشاز', id: 32 },
+				{ name: 'Samad', id: 1 },
+				{ name: 'Test', id: 3 },
+				{ name: 'sad', id: 4 },
+				{ name: 'یاشاز', id: 32 },
+				{ name: 'Samad', id: 1 },
+				{ name: 'Test', id: 3 },
+				{ name: 'sad', id: 4 }]},
 			success: function (d) {
 				$('#res').html(d);
 			}

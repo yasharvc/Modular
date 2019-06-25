@@ -34,28 +34,67 @@ namespace CoreCommons
 			return ConvertProperty(resType, parameters, parameterName, assembly);
 		}
 
-		private static object ConvertProperty(Type resType, List<RequestParameter> parameters,string propertyName, Assembly assembly = null)
+		private static object ConvertProperty(Type resType, List<RequestParameter> parameters,string propertyName, Assembly assembly = null,string name = "")
 		{
 			if (resType.IsPrimitiveType())
 			{
-				return Convert.ChangeType(parameters.Single(m => m.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase)).Value, resType);
+				object obj = null;
+				try
+				{
+					obj= parameters.Single(m => m.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase)).Value;
+				}
+				catch
+				{
+					obj = parameters.Single(m => m.Name.Equals(name, StringComparison.OrdinalIgnoreCase) && m.PropertyName.Equals(propertyName, StringComparison.OrdinalIgnoreCase)).Value;
+				}
+				return Convert.ChangeType(obj, resType);
 			}
 			else if (resType == typeof(Guid))
 			{
 				return new Guid(parameters.Single(m => m.Name.Equals(resType.Name, StringComparison.OrdinalIgnoreCase)).Value);
 			}
+			else if (resType.IsGenericType)
+			{
+				return GetListParameter(resType, parameters, assembly);
+			}
 			else if (resType.IsGenericType == false)//Class
 			{
-				var res = CreateObjectByType(resType, assembly);
-				var props = resType.GetProperties();
-				foreach (var prop in props)
-				{
-					var value = ConvertProperty(prop.PropertyType, parameters, prop.Name, assembly);
-					prop.SetValue(res, value);
-				}
-				return res;
+				return GetClassParameter(resType, parameters, assembly, propertyName);
 			}
 			return null;
+		}
+
+		private static object GetListParameter(Type resType, List<RequestParameter> parameters, Assembly assembly)
+		{
+			return null;
+			//var Result = CreateObjectByType(resType);
+			//var IListRef = typeof(List<>);
+			//var typeOfT = resType.GetGenericArguments()[0];
+			//Type[] IListParam = { typeOfT };
+			//try
+			//{
+			//	Result.GetType().GetMethod("AddRange").Invoke(Result, new object[] { input });
+			//}
+			//catch
+			//{
+			//	var lst = input as IEnumerable;
+			//	foreach (var item in lst)
+			//	{
+			//		Result.GetType().GetMethod("Add").Invoke(Result, new object[] { ChangeType(item, typeOfT) });
+			//	}
+			//}
+		}
+
+		private static object GetClassParameter(Type resType, List<RequestParameter> parameters, Assembly assembly, string name = "")
+		{
+			var res = CreateObjectByType(resType, assembly);
+			var props = resType.GetProperties();
+			foreach (var prop in props)
+			{
+				var value = ConvertProperty(prop.PropertyType, parameters, prop.Name, assembly, name);
+				prop.SetValue(res, value);
+			}
+			return res;
 		}
 
 		//private static void PropertyResolver(List<RequestParameter> parameters, object res, PropertyInfo prop)
