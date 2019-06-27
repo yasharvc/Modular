@@ -51,10 +51,10 @@ namespace ControllerExecuter
 						GetPrimitiveParameter(tempParameters, sortedParameter, i, parameter);
 					else if (parameter.ParameterType == typeof(Guid))
 						sortedParameter[i.ToString()] = new Guid(GetParameter(tempParameters, parameter).First().Value.ToString());
+					else if (parameter.ParameterType.GetInterface(nameof(IFormFile)) != null)
+						sortedParameter[i.ToString()] = tempParameters.Single(m => m.Name.Equals(parameter.Name, StringComparison.OrdinalIgnoreCase)).File;
 					else
-					{
-						sortedParameter[i.ToString()] = GetComplexParameter(parameter,tempParameters);
-					}
+						sortedParameter[i.ToString()] = GetComplexParameter(parameter, tempParameters);
 					i++;
 				}
 				return (ActionResult)routeData.Controller.GetMethod(routeData.GetActionName()).Invoke(Activator.CreateInstance(routeData.Controller), sortedParameter.Values.ToArray());

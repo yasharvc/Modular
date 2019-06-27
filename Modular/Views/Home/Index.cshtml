@@ -9,6 +9,8 @@
 	<button onclick="guid()" type="button">GUID Test</button>
 	<button onclick="ZestOfBitchi()" type="button">ZestOfBitchi</button>
 	<button onclick="GetWithClass()" type="button">Get With Class Test</button>
+	<button onclick="GetWithStringList()" type="button">Get With string list Test</button>
+
 </div>
 <div id="res"></div>
 <form action="/Default/GetInfo" method="put" enctype="application/x-www-form-urlencoded">
@@ -16,6 +18,28 @@
 	<input name="id" type="number" />
 	<button type="submit">Go!</button>
 </form>
+
+
+<form method="post" enctype="multipart/form-data" action="Default/FileTest">
+	<div class="form-group">
+		<div class="col-md-10">
+			<p>Upload one or more files using this form:</p>
+			<input type="file" name="file">
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-md-10">
+			<p>Name:</p>
+			<input type="text" name="name">
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-md-10">
+			<input type="submit" value="Upload">
+		</div>
+	</div>
+</form>
+
 <script>
 	function post() {
 		$.post({
@@ -36,23 +60,38 @@
 		});
 	}
 	function GetWithClass() {
-
+		debugger;
+		var data = ["a", "b", "c"];
+		var data2 = {
+			data:
+				[
+					{ name: 'یاشار', id: 32 },
+					{ name: 'Samad', id: 1 },
+					{ name: 'Test', id: 3 },
+					{ name: 'sad', id: 4 },
+					{ name: 'یاشاز', id: 32 },
+					{ name: 'Samad', id: 1 },
+					{ name: 'Test', id: 3 },
+					{ name: 'sad', id: 4 },
+					{ name: 'یاشاز', id: 32 },
+					{ name: 'Samad', id: 1 },
+					{ name: 'Test', id: 3 },
+					{ name: 'sad', id: 4 }]
+		};
 		$.get({
 			url: "/Default/ListOfClass",
-			data: { data:
-				[
-				{ name: 'یاشاز', id: 32 },
-				{ name: 'Samad', id: 1 },
-				{ name: 'Test', id: 3 },
-				{ name: 'sad', id: 4 },
-				{ name: 'یاشاز', id: 32 },
-				{ name: 'Samad', id: 1 },
-				{ name: 'Test', id: 3 },
-				{ name: 'sad', id: 4 },
-				{ name: 'یاشاز', id: 32 },
-				{ name: 'Samad', id: 1 },
-				{ name: 'Test', id: 3 },
-				{ name: 'sad', id: 4 }]},
+			data: data2,
+			success: function (d) {
+				$('#res').html(d);
+			}
+		});
+	}
+	function GetWithStringList() {
+		debugger;
+		var data = { data: ["a", "b", "c"]};
+		$.get({
+			url: "/Default/ListOfStrings",
+			data: data,
 			success: function (d) {
 				$('#res').html(d);
 			}

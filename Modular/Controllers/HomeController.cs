@@ -9,7 +9,7 @@ namespace Modular.Controllers
 		public class C1
 		{
 			public string Name { get; set; }
-			public int Age { get; set; }
+			public int id { get; set; }
 		}
         public IActionResult Index()
         {
@@ -19,7 +19,7 @@ namespace Modular.Controllers
 		public IActionResult Form(C1 test)
 		{
 			var request = HttpContext.Request;
-			return Content($"Your name is {test.Name} with age {test.Age}");
+			return Content($"Your name is {test.Name} with age {test.id}");
 		}
 
 		public IActionResult SimpleClass(C1 data)
@@ -29,7 +29,7 @@ namespace Modular.Controllers
 
 		public IActionResult ListOfClass(List<C1> data)
 		{
-			return Content($"{string.Join(",", data.Select(m => $"{m.Name} - {m.Age}"))}");
+			return Content($"{string.Join(",", data.Select(m => $"{m.Name} - {m.id}"))}");
 		}
 	}
 }
