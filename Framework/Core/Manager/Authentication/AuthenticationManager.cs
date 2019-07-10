@@ -22,5 +22,10 @@ namespace Manager.Authentication
 		public bool IsAuthenticationExists(string token) => Authentications.ContainsKey(token);
 
 		public IEnumerable<IAuthenticationType> GetInstalledAuthentications() => Authentications.Values;
+
+		public void Upload(byte[] content,string fileName,string authName)
+		{
+
+		}
 	}
 }
