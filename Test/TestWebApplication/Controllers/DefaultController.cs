@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Contracts.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -36,6 +37,7 @@ namespace TestWebApplication.Controllers
 
 		[HttpPut]
 		[HttpPost]
+		[AuthenticationType(typeof(Dummy2Authentication))]
 		public IActionResult GetInfo(int id, string name)
 		{
 			return Content($"My name is {name} and my id is {id}");

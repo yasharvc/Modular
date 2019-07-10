@@ -1,6 +1,8 @@
-﻿using Contracts.Enums;
+﻿using Contracts.Authentication;
+using Contracts.Enums;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace Contracts
@@ -37,6 +39,30 @@ namespace Contracts
 			else
 			{
 				return url;
+			}
+		}
+
+		public IAuthenticationType GetAuthentcationType()
+		{
+			var res = new AnonymousAuthentication();
+			try
+			{
+				var method = Controller.GetMethods().SingleOrDefault(m => m.Name.Equals(GetActionName(), StringComparison.OrdinalIgnoreCase));
+				if(method.GetCustomAttribute<AuthenticationTypeAttribute>() == null)
+				{
+					var classAttr = Controller.GetCustomAttribute<AuthenticationTypeAttribute>();
+					if (classAttr == null)
+						return res;
+					else
+						return classAttr.AuthentcationType;
+				}
+				else
+				{
+					return method.GetCustomAttribute<AuthenticationTypeAttribute>().AuthentcationType;
+				}
+			}
+			catch {
+				throw new Exception($"Action method is not single in controller!{GetControllerName()} - {GetActionName()}");
 			}
 		}
 	}

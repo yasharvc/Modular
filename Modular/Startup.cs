@@ -70,9 +70,11 @@ namespace Modular
 			AddAdditionalInformationToContext(context);
 			RequestHandler.RequestInformation res = GetRequestHandler(context);
 
+
 			try
 			{
 				var routeData = Executer.GetRouteFor(req.Path);
+				var x = routeData.GetAuthentcationType();
 				res.ParseAdditionalParameters(routeData.GetQueryString(req.Path));
 				var actionResult = Executer.InvokeAction(res,req);
 				context.Response.StatusCode = 200;
