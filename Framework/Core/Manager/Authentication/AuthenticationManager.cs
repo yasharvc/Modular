@@ -23,9 +23,11 @@ namespace Manager.Authentication
 
 		public IEnumerable<IAuthenticationType> GetInstalledAuthentications() => Authentications.Values;
 
-		public void Upload(byte[] content,string fileName,string authName)
+		public bool Upload(byte[] content)
 		{
-
+			var fx = new AuthenticationResolver(content).Resolve();
+			AddAuthentication(fx);
+			return new ModulesFileUploader.ModulesFileUploader().UploadToAuthenticationFolder(content, fx.Token, fx.Token);
 		}
 	}
 }
