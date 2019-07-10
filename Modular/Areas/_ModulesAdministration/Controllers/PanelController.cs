@@ -11,7 +11,7 @@ namespace Modular.Areas._ModulesAdministration.Controllers
     {
         public IActionResult Index()
         {
-            return Content("Panel>Index");
+            return View();
         }
     }
 }

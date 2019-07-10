@@ -21,7 +21,7 @@
   <ItemGroup>
     <Folder Include="Areas\_ModulesAdministration\Data\" />
     <Folder Include="Areas\_ModulesAdministration\Models\" />
-    <Folder Include="Areas\_ModulesAdministration\Views\" />
+    <Folder Include="Pages\" />
   </ItemGroup>
 
 </Project>
