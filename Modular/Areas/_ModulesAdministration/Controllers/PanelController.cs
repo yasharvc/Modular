@@ -9,9 +9,13 @@ namespace Modular.Areas._ModulesAdministration.Controllers
 	[Area("_ModulesAdministration")]
 	public class PanelController : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
-    }
+		public IActionResult Index() => View();
+
+		[HttpGet]
+		public IActionResult NewToken() => View();
+
+		[HttpGet]
+		public JsonResult GetNewToken() => Json(new { token = Startup.Manager.AuthenticationManager.GenerateNewToken() });
+
+	}
 }

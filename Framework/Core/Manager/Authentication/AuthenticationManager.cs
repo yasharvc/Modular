@@ -20,5 +20,7 @@ namespace Manager.Authentication
 		}
 
 		public bool IsAuthenticationExists(string token) => Authentications.ContainsKey(token);
+
+		public IEnumerable<IAuthenticationType> GetInstalledAuthentications() => Authentications.Values;
 	}
 }

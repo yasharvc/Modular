@@ -16,6 +16,7 @@ namespace Modular
 {
 	public class Startup
 	{
+		public static Manager.Manager Manager { get; } = new Manager.Manager();
 		public Startup(IConfiguration configuration)
 		{
 			Configuration = configuration;
