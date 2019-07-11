@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\ControllerExecuter\ControllerExecuter.csproj" />
     <ProjectReference Include="..\..\Contracts\Contracts.csproj" />
     <ProjectReference Include="..\ModulesFileUploader\ModulesFileUploader.csproj" />
   </ItemGroup>

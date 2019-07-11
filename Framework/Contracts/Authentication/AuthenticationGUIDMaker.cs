@@ -1,13 +1,10 @@
-﻿using System;
+﻿using Contracts.Contracts;
+using System;
 
 namespace Contracts.Authentication
 {
-	public class AuthenticationGUIDMaker
+	public class AuthenticationGUIDMaker : GUIDMaker
 	{
-		public string GetNew() => CreateCode(Guid.NewGuid());
-
-		internal string GetAnonymouse() => CreateCode(new Guid());
-
-		internal string CreateCode(Guid guid) => $"AUTH-{guid.ToString().ToUpper()}";
+		public AuthenticationGUIDMaker() : base("AUTH") { }
 	}
 }

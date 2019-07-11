@@ -1,11 +1,9 @@
 ﻿using Contracts.Authentication;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Manager.Authentication
 {
-	public class AuthenticationManager
+	public class AuthenticationManager : IManager
 	{
 		protected Dictionary<string, IAuthenticationType> Authentications { get; } = new Dictionary<string, IAuthenticationType>();
 

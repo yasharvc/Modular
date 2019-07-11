@@ -16,8 +16,9 @@ namespace Modular.Areas._ModulesAdministration.Controllers
 		public IActionResult NewToken() => View();
 
 		[HttpGet]
-		public JsonResult GetNewToken() => Json(new { token = Startup.Manager.AuthenticationManager.GenerateNewToken() });
-
+		public JsonResult GetNewAuthToken() => Json(new { token = Startup.Manager.AuthenticationManager.GenerateNewToken() });
+		[HttpGet]
+		public JsonResult GetNewModuleToken() => Json(new { token = Startup.Manager.ModuleManager.GenerateNewToken() });
 		[HttpGet]
 		public IActionResult Upload()
 		{
