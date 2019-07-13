@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using static Contracts.Delegates;
 
 namespace ModulesFileUploader
 {
@@ -21,35 +22,27 @@ namespace ModulesFileUploader
 			return queryCommonFiles.Select(m => m.FullName);
 		}
 
-		public IEnumerable<string> MoveAll(string srcPath,string destPath)
+		public IEnumerable<string> MoveAll(string srcPath,string destPath,params StringToString[] fileConvertors)
 		{
 			var exceptions = new List<string>();
 			var moved = new List<string>();
 			DirectoryInfo srcDir = new DirectoryInfo(srcPath);
-			try
+			if (fileConvertors.Length == 0)
 			{
-				srcDir.MoveTo(destPath);
+				try
+				{
+					srcDir.MoveTo(destPath);
+				}
+				catch
+				{
+					foreach (var file in srcDir.GetFiles("*.*", SearchOption.AllDirectories))
+						MoveFile(srcPath, destPath, file, moved: moved, exceptions: exceptions);
+				}
 			}
-			catch
+			else
 			{
 				foreach (var file in srcDir.GetFiles("*.*", SearchOption.AllDirectories))
-				{
-					var relativePath = file.DirectoryName.Replace(srcPath, "");
-					if (relativePath.StartsWith("\\"))
-						relativePath = relativePath.Substring(1);
-					var filePathInDest = Path.Combine(destPath, relativePath);
-					Directory.CreateDirectory(filePathInDest);
-					try
-					{
-						file.CopyTo(Path.Combine(filePathInDest, file.Name), true);
-						file.Delete();
-						moved.Add(Path.Combine(filePathInDest, file.Name));
-					}
-					catch
-					{
-						exceptions.Add(file.FullName);
-					}
-				}
+					MoveFile(srcPath, destPath, file, moved: moved, exceptions: exceptions, fileConvertors: fileConvertors);
 			}
 			if (exceptions.Count == 0)
 				srcDir.Delete(true);
@@ -59,23 +52,57 @@ namespace ModulesFileUploader
 				foreach (var filePath in moved)
 				{
 					var file = new FileInfo(filePath);
-					var relativePath = file.DirectoryName.Replace(destPath, "");
-					if (relativePath.StartsWith("\\"))
-						relativePath = relativePath.Substring(1);
-					var filePathInSrc = Path.Combine(srcPath, relativePath);
-					Directory.CreateDirectory(filePathInSrc);
-					try
-					{
-						file.MoveTo(Path.Combine(filePathInSrc, file.Name));
-					}
-					catch
-					{
-						
-					}
+					MoveFile(destPath, srcPath, file, false);
 				}
 				destDir.Delete(true);
 			}
 			return exceptions;
+		}
+
+		private void MoveFile(string srcPath, string destPath, FileInfo file,bool useCopyDeleteAlgorithm = true, List<string> moved = null, List<string> exceptions = null, params StringToString[] fileConvertors)
+		{
+			var relativePath = file.DirectoryName.Replace(srcPath, "");
+			if (relativePath.StartsWith("\\"))
+				relativePath = relativePath.Substring(1);
+			var filePathInDest = Path.Combine(destPath, relativePath);
+			Directory.CreateDirectory(filePathInDest);
+			try
+			{
+				if (fileConvertors.Length == 0)
+				{
+					if (useCopyDeleteAlgorithm)
+					{
+						file.CopyTo(Path.Combine(filePathInDest, file.Name), true);
+						file.Delete();
+					}
+					else
+					{
+						file.MoveTo(Path.Combine(filePathInDest, file.Name));
+					}
+				}
+				else
+				{
+					ConvertFileAndSave(file, fileConvertors, filePathInDest);
+				}
+				if (moved != null)
+					moved.Add(Path.Combine(filePathInDest, file.Name));
+			}
+			catch
+			{
+				if (exceptions != null)
+					exceptions.Add(file.FullName);
+			}
+		}
+
+		private void ConvertFileAndSave(FileInfo file, StringToString[] fileConvertors, string filePathInDest)
+		{
+			var res = File.ReadAllText(file.FullName);
+			foreach (var converter in fileConvertors)
+			{
+				res = converter(res);
+			}
+			File.WriteAllText(Path.Combine(filePathInDest, file.Name), res);
+			file.Delete();
 		}
 
 		class FileCompare : IEqualityComparer<System.IO.FileInfo>
