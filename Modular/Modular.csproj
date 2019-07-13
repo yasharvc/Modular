@@ -16,6 +16,7 @@
     <ProjectReference Include="..\Framework\Contracts\Contracts.csproj" />
     <ProjectReference Include="..\Framework\Core\CoreCommons\CoreCommons.csproj" />
     <ProjectReference Include="..\Framework\Core\Manager\Manager.csproj" />
+    <ProjectReference Include="..\Framework\Core\ModulesFileUploader\ModulesFileUploader.csproj" />
     <ProjectReference Include="..\Framework\Core\RequestHandler\RequestHandler.csproj" />
     <ProjectReference Include="..\Framework\Core\TypeConverter\TypeConverter.csproj" />
   </ItemGroup>

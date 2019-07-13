@@ -12,6 +12,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\ControllerExecuter\ControllerExecuter.csproj" />
     <ProjectReference Include="..\..\Framework\Contracts\Contracts.csproj" />
+    <ProjectReference Include="..\..\Framework\Core\ModulesFileUploader\ModulesFileUploader.csproj" />
   </ItemGroup>
 
 </Project>

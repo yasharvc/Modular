@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ModulesFileUploader;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -30,6 +31,12 @@ namespace Modular.Controllers
 		public IActionResult ListOfClass(List<C1> data)
 		{
 			return Content($"{string.Join(",", data.Select(m => $"{m.Name} - {m.id}"))}");
+		}
+
+		public IActionResult UploadWWW()
+		{
+			new FolderedFileUploader("__").Move("D:\\Test");
+			return Content("DASDS");
 		}
 	}
 }

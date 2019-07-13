@@ -6,6 +6,7 @@ namespace ModulesFileUploader
 	public class ModulesFileUploader
 	{
 		private readonly string BasePath = "__";
+		private readonly string TempPath = "temp";
 		private readonly string AuthenticationFolderPathInsideRoot = "Auth";
 
 		public bool UploadToAuthenticationFolder(byte[] fileContent,string fileName,string path)
