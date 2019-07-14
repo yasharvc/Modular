@@ -12,5 +12,6 @@ namespace ModulesFileUploader.MVCFileUploader
 			SourcePathFolder = "Pages";
 			Convertors.Add(new CSHTMLFileConverter());
 		}
+		public PagesFileUploader(string moduleName, string tempFolderName) : this(moduleName) => SubPath = tempFolderName;
 	}
 }

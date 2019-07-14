@@ -14,6 +14,8 @@ namespace ModulesFileUploader
 
 		protected string BasePath { get; set; } = "wwwroot";
 
-		public virtual bool Move(string sourcePath) => new FileHelper().MoveAll(sourcePath, BasePath, FileIgnorance, Convertors.ToArray()).Count() == 0;
+		protected string SubPath { get; set; } = "";
+
+		public virtual bool Move(string sourcePath) => new FileHelper().MoveAll(sourcePath, Path.Combine(BasePath, SubPath), FileIgnorance, Convertors.ToArray()).Count() == 0;
 	}
 }

@@ -22,5 +22,7 @@ namespace ModulesFileUploader.MVCFileUploader
 			};
 			Convertors.Add(new CSHTMLFileConverter());
 		}
+
+		public ViewsFileUploader(string moduleName, string tempFolderName) : this(moduleName) => SubPath = tempFolderName;
 	}
 }

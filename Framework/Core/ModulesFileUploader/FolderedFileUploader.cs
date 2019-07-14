@@ -11,7 +11,7 @@ namespace ModulesFileUploader
 
 		protected string SourcePathFolder { get; set; } = "";
 
-		public override bool Move(string sourcePath) => new FileHelper().MoveAll(Path.Combine(sourcePath, SourcePathFolder), Path.Combine(BasePath, Folder, SourcePathFolder), FileIgnorance, Convertors.ToArray()).Count() == 0;
+		public override bool Move(string sourcePath) => new FileHelper().MoveAll(Path.Combine(sourcePath, SourcePathFolder), Path.Combine(BasePath, SubPath, Folder, SourcePathFolder), FileIgnorance, Convertors.ToArray()).Count() == 0;
 
 	}
 }
