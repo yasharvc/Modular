@@ -9,7 +9,9 @@ namespace ModulesFileUploader
 
 		public FolderedFileUploader(string folder) => Folder = folder;
 
-		public override bool Move(string sourcePath) => new FileHelper().MoveAll(sourcePath, Path.Combine(BasePath,Folder)).Count() == 0;
+		protected string SourcePathFolder { get; set; } = "";
+
+		public override bool Move(string sourcePath) => new FileHelper().MoveAll(Path.Combine(sourcePath, SourcePathFolder), Path.Combine(BasePath, Folder, SourcePathFolder), FileIgnorance, Convertors.ToArray()).Count() == 0;
 
 	}
 }

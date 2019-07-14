@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ModulesFileUploader;
+using ModulesFileUploader.MVCFileUploader;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -36,6 +36,7 @@ namespace Modular.Controllers
 		public IActionResult UploadWWW()
 		{
 			new ViewsFileUploader("xyz").Move("D:\\Test");
+			new PagesFileUploader("xyz").Move("D:\\Test");
 			return Content("DASDS");
 		}
 	}

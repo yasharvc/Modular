@@ -22,12 +22,12 @@ namespace ModulesFileUploader
 			return queryCommonFiles.Select(m => m.FullName);
 		}
 
-		public IEnumerable<string> MoveAll(string srcPath,string destPath,params StringToString[] fileConvertors)
+		public IEnumerable<string> MoveAll(string srcPath,string destPath,Func<FileInfo,bool> fileIgnore,params FileConverter.FileConverter[] fileConvertors)
 		{
 			var exceptions = new List<string>();
 			var moved = new List<string>();
 			DirectoryInfo srcDir = new DirectoryInfo(srcPath);
-			if (fileConvertors.Length == 0)
+			if (fileConvertors.Length == 0 && fileIgnore == null)
 			{
 				try
 				{
@@ -41,8 +41,19 @@ namespace ModulesFileUploader
 			}
 			else
 			{
-				foreach (var file in srcDir.GetFiles("*.*", SearchOption.AllDirectories))
-					MoveFile(srcPath, destPath, file, moved: moved, exceptions: exceptions, fileConvertors: fileConvertors);
+				if (fileIgnore == null)
+				{
+					foreach (var file in srcDir.GetFiles("*.*", SearchOption.AllDirectories))
+						MoveFile(srcPath, destPath, file, moved: moved, exceptions: exceptions, fileConvertors: fileConvertors);
+				}
+				else
+				{
+					foreach (var file in srcDir.GetFiles("*.*", SearchOption.AllDirectories))
+					{
+						if(fileIgnore(file) == false)
+							MoveFile(srcPath, destPath, file, moved: moved, exceptions: exceptions, fileConvertors: fileConvertors);
+					}
+				}
 			}
 			if (exceptions.Count == 0)
 				srcDir.Delete(true);
@@ -59,7 +70,7 @@ namespace ModulesFileUploader
 			return exceptions;
 		}
 
-		private void MoveFile(string srcPath, string destPath, FileInfo file,bool useCopyDeleteAlgorithm = true, List<string> moved = null, List<string> exceptions = null, params StringToString[] fileConvertors)
+		private void MoveFile(string srcPath, string destPath, FileInfo file,bool useCopyDeleteAlgorithm = true, List<string> moved = null, List<string> exceptions = null, params FileConverter.FileConverter[] fileConvertors)
 		{
 			var relativePath = file.DirectoryName.Replace(srcPath, "");
 			if (relativePath.StartsWith("\\"))
@@ -94,12 +105,12 @@ namespace ModulesFileUploader
 			}
 		}
 
-		private void ConvertFileAndSave(FileInfo file, StringToString[] fileConvertors, string filePathInDest)
+		private void ConvertFileAndSave(FileInfo file, FileConverter.FileConverter[] fileConvertors, string filePathInDest)
 		{
 			var res = File.ReadAllText(file.FullName);
 			foreach (var converter in fileConvertors)
 			{
-				res = converter(res);
+				res = converter.Convert(file.Name, res);
 			}
 			File.WriteAllText(Path.Combine(filePathInDest, file.Name), res);
 			file.Delete();
