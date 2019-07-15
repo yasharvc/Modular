@@ -35,8 +35,10 @@ namespace Modular.Controllers
 
 		public IActionResult UploadWWW()
 		{
-			new ViewsFileUploader("xyz","temp").Move("D:\\Test");
-			new PagesFileUploader("xyz","temp").Move("D:\\Test");
+
+			Startup.Manager.Upload(System.IO.File.ReadAllBytes(@"D:\Test\Test.zip"));
+			//new ViewsFileUploader("xyz","temp").Move("D:\\Test");
+			//new PagesFileUploader("xyz","temp").Move("D:\\Test");
 			return Content("DASDS");
 		}
 	}
