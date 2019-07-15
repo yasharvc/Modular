@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Manager.Module
+namespace Contracts.Module
 {
 	public class ModuleManifest
 	{

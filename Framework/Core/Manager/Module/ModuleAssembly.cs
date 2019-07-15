@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using Contracts.Module;
+using System;
+using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace Manager.Module
@@ -21,6 +24,21 @@ namespace Manager.Module
 			Manifest.Token = token;
 			Manifest.Version = assembly.GetName().Version;
 		}
+
+		public ModuleAssembly(byte[] bytes)
+		{
+			Bytes = bytes;
+			ResolveNameAndToken();
+		}
+
+		private void ResolveNameAndToken()
+		{
+			var manifest = GetManifest();
+			Manifest.Name = manifest.Name;
+			Manifest.Token = manifest.Token;
+		}
+
+		private ModuleManifest GetManifest() => Activator.CreateInstance(assembly.GetTypes().Single(m => m.IsSubclassOf(typeof(ModuleManifest)))) as ModuleManifest;
 
 		public void SetDescription(string desc) => Manifest.Description = desc;
 

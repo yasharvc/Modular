@@ -8,10 +8,11 @@ namespace TempFolderManager
 		public const string ModuleBasePath = "__";
 		public const string TempFolderBasePath = ModuleBasePath + "\\Temp";
 		public string PathToTemp { get; protected set; }
+		public string TempGuid { get; private set; } = "";
 		public string CreateNewTempFolder()
 		{
-			var newGUID = AcequireGUID();
-			var path = Path.Combine(TempFolderBasePath, newGUID);
+			TempGuid = AcequireGUID();
+			var path = Path.Combine(TempFolderBasePath, TempGuid);
 			Directory.CreateDirectory(path);
 			PathToTemp = path;
 			return PathToTemp;

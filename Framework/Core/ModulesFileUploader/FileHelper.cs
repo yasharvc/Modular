@@ -72,7 +72,7 @@ namespace ModulesFileUploader
 
 		private void MoveFile(string srcPath, string destPath, FileInfo file,bool useCopyDeleteAlgorithm = true, List<string> moved = null, List<string> exceptions = null, params FileConverter.FileConverter[] fileConvertors)
 		{
-			var relativePath = file.DirectoryName.Replace(srcPath, "");
+			var relativePath = file.DirectoryName.Substring(file.DirectoryName.IndexOf(srcPath) + srcPath.Length);
 			if (relativePath.StartsWith("\\"))
 				relativePath = relativePath.Substring(1);
 			var filePathInDest = Path.Combine(destPath, relativePath);
