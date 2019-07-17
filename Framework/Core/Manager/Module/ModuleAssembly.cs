@@ -30,6 +30,11 @@ namespace Manager.Module
 			Bytes = bytes;
 			ResolveNameAndToken();
 		}
+		public ModuleAssembly(Assembly assembly)
+		{
+			this.assembly = assembly;
+			ResolveNameAndToken();
+		}
 
 		private void ResolveNameAndToken()
 		{

@@ -15,6 +15,8 @@ namespace Contracts
 		public Type Controller { get; set; }
 		public List<ParameterInfo> Parameters { get; set; } = new List<ParameterInfo>();
 
+		public string ModuleName { get; set; }
+
 		public string GetControllerName() => Path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries)[0];
 		public string GetActionName() => Path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries)[1];
 

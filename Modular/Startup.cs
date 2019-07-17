@@ -75,7 +75,6 @@ namespace Modular
 
 			var actionContext = CreateActionContext(context);
 			var Executer = CreateControllerExecuter();
-			Executer.ResolveRoutes();
 			AddAdditionalInformationToContext(context);
 			RequestHandler.RequestInformation res = GetRequestHandler(context);
 

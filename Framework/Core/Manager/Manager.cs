@@ -1,5 +1,6 @@
 ﻿using Manager.Authentication;
 using Manager.Module;
+using Manager.Router;
 using ModulesFileUploader;
 using ModulesFileUploader.MVCFileUploader;
 using System;
@@ -15,6 +16,7 @@ namespace Manager
 	{
 		public AuthenticationManager AuthenticationManager { get; } = new AuthenticationManager();
 		public ModuleManager ModuleManager { get; } = new ModuleManager();
+		public RouterManager RouterManager { get; } = new RouterManager();
 
 		public void Upload(byte[] zipFile)
 		{
@@ -26,6 +28,8 @@ namespace Manager
 			new StaticFileUploader().Move(tempFolder.PathToTemp);
 			new ViewsFileUploader(resolver.GetModuleManifest().Name).Move(tempFolder.PathToTemp);
 			new PagesFileUploader(resolver.GetModuleManifest().Name).Move(tempFolder.PathToTemp);
+
+			RouterManager.ResolveRouteInformation(resolver.Assembly);
 		}
 	}
 }

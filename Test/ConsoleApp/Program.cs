@@ -18,7 +18,7 @@ namespace ConsoleApp
 			var src = @"D:\From";
 			var dest = @"D:\Test";
 			//Console.WriteLine(string.Join("\r\n", staticFile.GetConfilctedFiles(src, dest)));
-			staticFile.MoveAll(src, dest);
+			//staticFile.MoveAll(src, dest);
 			Console.ReadKey();
 		}
 	}
