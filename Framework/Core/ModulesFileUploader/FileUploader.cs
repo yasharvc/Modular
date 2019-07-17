@@ -16,6 +16,6 @@ namespace ModulesFileUploader
 
 		protected string SubPath { get; set; } = "";
 
-		public virtual bool Move(string sourcePath) => new FileHelper().MoveAll(sourcePath, Path.Combine(BasePath, SubPath), FileIgnorance, Convertors.ToArray()).Count() == 0;
+		public virtual bool Move(string sourcePath) => new FileHelper().MoveAll(Path.Combine(sourcePath,BasePath), Path.Combine(BasePath, SubPath), FileIgnorance, Convertors.ToArray()).Count() == 0;
 	}
 }
