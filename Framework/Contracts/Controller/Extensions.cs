@@ -17,9 +17,9 @@ namespace Contracts.Controller
 				return ctrl.View(name, model);
 			else
 			{
-				var mdlName = ctrl.HttpContext.Items[Consts.CONTEXT_ITEM_KEY_THEME_MODULE_NAME].ToString();
+				var mdlName = ctrl.ControllerContext.HttpContext.Items[Consts.CONTEXT_ITEM_KEY_THEME_MODULE_NAME].ToString();
 				var controllerName = ctrl.GetType().Name.Replace("Controller", "", StringComparison.OrdinalIgnoreCase);
-				var path = $"~/{Consts.MODULES_BASE_PATH}/{mdlName}/Views/{controllerName}/";
+				var path = $"{Consts.MODULES_BASE_PATH}\\{mdlName}\\Views\\{controllerName}\\";
 				var file = "";
 				try
 				{
@@ -29,7 +29,7 @@ namespace Contracts.Controller
 				{
 					throw new ViewFileNotFoundException(mdlName, controllerName, name);
 				}
-				return ctrl.View($"{path}{new FileInfo(file).Name}", model);
+				return ctrl.View($"~/{path.Replace("\\","/")}{new FileInfo(file).Name}", model);
 			}
 		}
 

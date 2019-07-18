@@ -27,7 +27,11 @@ namespace TempFolderManager
 					if (entry.FullName.EndsWith("/"))
 						Directory.CreateDirectory(path);
 					else
-						File.WriteAllBytes(path, ZipEntryToBytes(entry.Open()));
+					{
+						FileInfo info = new FileInfo(path.Replace("/", "\\"));
+						Directory.CreateDirectory(info.DirectoryName);
+						File.WriteAllBytes(path.Replace("/", "\\"), ZipEntryToBytes(entry.Open()));
+					}
 				}
 			}
 		}

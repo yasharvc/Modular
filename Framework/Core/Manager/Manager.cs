@@ -20,7 +20,7 @@ namespace Manager
 		public RouterManager RouterManager { get; } = new RouterManager();
 
 		public Dictionary<string, IThemeProvider> ThemeProviders { get; } = new Dictionary<string, IThemeProvider>();
-		public string CurrentThemeProvider => "";
+		public string CurrentThemeProvider { get; private set; } = "";
 
 		public string ThemeLayoutPath
 		{
@@ -28,7 +28,7 @@ namespace Manager
 			{
 				if (string.IsNullOrEmpty(CurrentThemeProvider) || !ThemeProviders.ContainsKey(CurrentThemeProvider))
 					return "_Layout";
-				return $"~/{Consts.MODULES_BASE_PATH}/{CurrentThemeProvider}/{ThemeProviders[CurrentThemeProvider].LayoutPathInsideModule}";
+				return $"~/{Consts.MODULES_BASE_PATH}/{CurrentThemeProvider}{(ThemeProviders[CurrentThemeProvider].LayoutPathInsideModule.StartsWith("/") ? "" : "/")}{ThemeProviders[CurrentThemeProvider].LayoutPathInsideModule}";
 			}
 		}
 
@@ -40,19 +40,26 @@ namespace Manager
 			var path = Directory.GetFiles(tempFolder.PathToTemp, "*.dll").First();
 			ModuleResolver resolver = new ModuleResolver(File.ReadAllBytes(path));
 
+			string ModuleName = resolver.GetModuleManifest().Name;
 			try
 			{
 				var theme = resolver.Assembly.GetThemeProvider();
-				ThemeProviders[resolver.GetModuleManifest().Name] = theme;
+				ThemeProviders[ModuleName] = theme;
+				CurrentThemeProvider = ModuleName;
 			}
 			catch { }
-			new StaticFileUploader().Move(tempFolder.PathToTemp);
-			new ViewsFileUploader(resolver.GetModuleManifest().Name).Move(tempFolder.PathToTemp);
-			new PagesFileUploader(resolver.GetModuleManifest().Name).Move(tempFolder.PathToTemp);
 
-			ModuleManager.AddModule(resolver.GetModuleManifest().Name, resolver.Assembly);
+
+			new StaticFileUploader().Move(tempFolder.PathToTemp);
+
+			new ViewsFileUploader(ModuleName).Move(tempFolder.PathToTemp);
+			new PagesFileUploader(ModuleName).Move(tempFolder.PathToTemp);
+			new ModuleDllUploader(ModuleName).Move(tempFolder.PathToTemp);
+
+			ModuleManager.AddModule(ModuleName, resolver.Assembly);
 			RouterManager.ResolveRouteInformation(resolver.Assembly);
 
+			tempFolder.Delete();
 		}
 
 		public ControllerExecuter.ControllerExecuter GetExecuter(string moduleName) => new ControllerExecuter.ControllerExecuter(ModuleManager.GetAssembly(moduleName));

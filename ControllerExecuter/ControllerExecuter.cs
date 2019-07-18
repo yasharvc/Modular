@@ -17,7 +17,7 @@ namespace ControllerExecuter
 		Assembly Assembly { get; set; }
 		public ControllerExecuter(Assembly assembly = null) => Assembly = assembly;
 
-		public ActionResult InvokeAction(RequestInformation requestInformation, RouteInformation routeData)
+		public ActionResult InvokeAction(RequestInformation requestInformation, RouteInformation routeData, HttpContext context)
 		{
 			if (routeData.AllowedMethods.Contains(requestInformation.Method))
 			{
@@ -36,7 +36,10 @@ namespace ControllerExecuter
 						sortedParameter[i.ToString()] = GetComplexParameter(parameter, tempParameters);
 					i++;
 				}
-				return (ActionResult)routeData.Controller.GetMethod(routeData.GetActionName()).Invoke(Activator.CreateInstance(routeData.Controller), sortedParameter.Values.ToArray());
+				var ctrl = Activator.CreateInstance(routeData.Controller) as Controller;
+				ctrl.ControllerContext = new ControllerContext();
+				ctrl.ControllerContext.HttpContext = context;
+				return (ActionResult)routeData.Controller.GetMethod(routeData.GetActionName()).Invoke(ctrl, sortedParameter.Values.ToArray());
 			}
 			throw new MethodNotAllowedException(routeData.GetControllerName(), routeData.GetActionName(), requestInformation.Method);
 		}

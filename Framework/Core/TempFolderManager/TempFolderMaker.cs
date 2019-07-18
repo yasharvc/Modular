@@ -20,5 +20,7 @@ namespace TempFolderManager
 		}
 
 		private string AcequireGUID() => Guid.NewGuid().ToString();
+
+		public void Delete() => Directory.Delete(PathToTemp);
 	}
 }

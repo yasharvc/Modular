@@ -48,15 +48,21 @@ namespace ModulesFileUploader
 				}
 				else
 				{
-					foreach (var file in srcDir.GetFiles("*.*", SearchOption.AllDirectories))
+					if (srcDir.Exists)
 					{
-						if(fileIgnore(file) == false)
-							MoveFile(srcPath, destPath, file, moved: moved, exceptions: exceptions, fileConvertors: fileConvertors);
+						foreach (var file in srcDir.GetFiles("*.*", SearchOption.AllDirectories))
+						{
+							if (fileIgnore(file) == false)
+								MoveFile(srcPath, destPath, file, moved: moved, exceptions: exceptions, fileConvertors: fileConvertors);
+						}
 					}
 				}
 			}
 			if (exceptions.Count == 0)
-				srcDir.Delete(true);
+			{
+				if(srcDir.Exists)
+					srcDir.Delete(true);
+			}
 			else
 			{
 				DirectoryInfo destDir = new DirectoryInfo(destPath);
