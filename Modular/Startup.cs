@@ -1,3 +1,4 @@
+using Contracts;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -72,23 +73,21 @@ namespace Modular
 		private async Task Handle404(HttpContext context, Func<Task> next)
 		{
 			var req = context.Request;
-
 			var actionContext = CreateActionContext(context);
-			var Executer = CreateControllerExecuter();
 			AddAdditionalInformationToContext(context);
 			RequestHandler.RequestInformation res = GetRequestHandler(context);
 
-
 			try
 			{
-				var routeData = Executer.GetRouteFor(req.Path);
+				var routeData = Manager.RouterManager.GetRouteFor(req.Path);
+				var Executer = Manager.GetExecuter(routeData.ModuleName);
 				var x = routeData.GetAuthentcationType();
 				res.ParseAdditionalParameters(routeData.GetQueryString(req.Path));
-				var actionResult = Executer.InvokeAction(res,req);
+				var actionResult = Executer.InvokeAction(res, routeData);
 				context.Response.StatusCode = 200;
 				await actionResult.ExecuteResultAsync(actionContext);
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				context.Response.StatusCode = 418;
 				await context.Response.WriteAsync($"{res.ContentType} : {string.Join(" AND ", res.RequestParameters.Select(m => $"{m.Name} - {m.Value}"))} = {res.Method}");//string.Join(",",form.Select(m => $"{m.Key} = {m.Value[0]}")));
@@ -106,7 +105,8 @@ namespace Modular
 
 		private void AddAdditionalInformationToContext(HttpContext context)
 		{
-			context.Items.Add("Creator", "Yashar");
+			context.Items[Consts.CONTEXT_ITEM_KEY_THEME_LAYOUT_PATH] = Manager.ThemeLayoutPath;
+			context.Items[Consts.CONTEXT_ITEM_KEY_CREATOR] ="Yashar";
 		}
 
 		private ActionContext CreateActionContext(HttpContext context)

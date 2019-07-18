@@ -16,21 +16,9 @@ namespace ControllerExecuter
 	{
 		Assembly Assembly { get; set; }
 		public ControllerExecuter(Assembly assembly = null) => Assembly = assembly;
-		List<RouteInformation> Routes { get; } = new List<RouteInformation>();
 
-		public RouteInformation GetRouteFor(string url)
+		public ActionResult InvokeAction(RequestInformation requestInformation, RouteInformation routeData)
 		{
-			if (!url.EndsWith('/'))
-				url += '/';
-			var res = Routes.Where(m => url.StartsWith(m.Path, StringComparison.OrdinalIgnoreCase)).OrderBy(m => m.Path.Length);
-			return res.Last();
-		}
-
-		
-
-		public ActionResult InvokeAction(RequestInformation requestInformation, HttpRequest request)
-		{
-			var routeData = GetRouteFor(request.Path);
 			if (routeData.AllowedMethods.Contains(requestInformation.Method))
 			{
 				var tempParameters = requestInformation.RequestParameters;

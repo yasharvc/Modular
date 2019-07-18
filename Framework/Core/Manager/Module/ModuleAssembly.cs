@@ -1,4 +1,5 @@
-﻿using Contracts.Module;
+﻿using Contracts;
+using Contracts.Module;
 using System;
 using System.IO;
 using System.Linq;
@@ -44,6 +45,8 @@ namespace Manager.Module
 		}
 
 		private ModuleManifest GetManifest() => Activator.CreateInstance(assembly.GetTypes().Single(m => m.IsSubclassOf(typeof(ModuleManifest)))) as ModuleManifest;
+
+		public IThemeProvider GetThemeProvider() => Activator.CreateInstance(assembly.GetTypes().Single(m => m.GetInterface(nameof(IThemeProvider)) != null)) as IThemeProvider;
 
 		public void SetDescription(string desc) => Manifest.Description = desc;
 

@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Contracts;
+using System;
 using System.IO;
 
 namespace TempFolderManager
 {
 	public class TempFolderMaker
 	{
-		public const string ModuleBasePath = "__";
+		public const string ModuleBasePath = Consts.MODULES_BASE_PATH;
 		public const string TempFolderBasePath = ModuleBasePath + "\\Temp";
 		public string PathToTemp { get; protected set; }
 		public string TempGuid { get; private set; } = "";

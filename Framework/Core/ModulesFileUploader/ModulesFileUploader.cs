@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Contracts;
+using System;
 using System.IO;
 
 namespace ModulesFileUploader
 {
 	public class ModulesFileUploader
 	{
-		private readonly string BasePath = "__";
+		private readonly string BasePath = Consts.MODULES_BASE_PATH;
 		private readonly string TempPath = "temp";
 		private readonly string AuthenticationFolderPathInsideRoot = "Auth";
 
