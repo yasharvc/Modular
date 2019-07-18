@@ -81,6 +81,7 @@ namespace Modular
 			{
 				var routeData = Manager.RouterManager.GetRouteFor(req.Path);
 				var Executer = Manager.GetExecuter(routeData.ModuleName);
+				SetModuleNameInHttpContext(context, routeData.ModuleName);
 				var x = routeData.GetAuthentcationType();
 				res.ParseAdditionalParameters(routeData.GetQueryString(req.Path));
 				var actionResult = Executer.InvokeAction(res, routeData);
@@ -93,6 +94,8 @@ namespace Modular
 				await context.Response.WriteAsync($"{res.ContentType} : {string.Join(" AND ", res.RequestParameters.Select(m => $"{m.Name} - {m.Value}"))} = {res.Method}");//string.Join(",",form.Select(m => $"{m.Key} = {m.Value[0]}")));
 			}
 		}
+
+		private void SetModuleNameInHttpContext(HttpContext context, string moduleName) => context.Items[Consts.CONTEXT_ITEM_KEY_THEME_MODULE_NAME] = moduleName;
 
 		#region Clean Code
 
@@ -115,12 +118,12 @@ namespace Modular
 			return new ActionContext(context, routeData, getActionDescriptor(context));
 		}
 
-		private ControllerExecuter.ControllerExecuter CreateControllerExecuter()
-		{
-			var pathToDLL = @"G:\Modular\Test\TestWebApplication\bin\Debug\netcoreapp2.1\TestWebApplication.dll";
-			Assembly assembly = Assembly.Load(File.ReadAllBytes(pathToDLL));
-			return new ControllerExecuter.ControllerExecuter(assembly);
-		}
+		//private ControllerExecuter.ControllerExecuter CreateControllerExecuter()
+		//{
+		//	var pathToDLL = @"G:\Modular\Test\TestWebApplication\bin\Debug\netcoreapp2.1\TestWebApplication.dll";
+		//	Assembly assembly = Assembly.Load(File.ReadAllBytes(pathToDLL));
+		//	return new ControllerExecuter.ControllerExecuter(assembly);
+		//}
 
 		private ActionDescriptor getActionDescriptor(HttpContext context)
 		{

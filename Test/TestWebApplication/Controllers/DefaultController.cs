@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Contracts.Controller;
 
 namespace TestWebApplication.Controllers
 {
@@ -16,7 +17,7 @@ namespace TestWebApplication.Controllers
 		}
 		public IActionResult Index()
 		{
-			return View();
+			return this.GetView();
 		}
 
 		[HttpPost]
