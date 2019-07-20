@@ -8,6 +8,7 @@ using Contracts.Controller;
 
 namespace TestWebApplication.Controllers
 {
+	[AuthenticationType(typeof(TestAuth))]
 	public class DefaultController : FCOntroller
 	{
 		public class Test

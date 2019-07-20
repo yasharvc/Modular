@@ -23,9 +23,16 @@ namespace Manager.Authentication
 
 		public bool Upload(byte[] content)
 		{
-			var fx = new AuthenticationResolver(content).Resolve();
-			AddAuthentication(fx);
-			return new ModulesFileUploader.ModulesFileUploader().UploadToAuthenticationFolder(content, fx.Token, fx.Token);
+			try
+			{
+				var fx = new AuthenticationResolver(content).Resolve();
+				AddAuthentication(fx);
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
 		}
 	}
 }

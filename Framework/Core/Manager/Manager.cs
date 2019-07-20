@@ -38,7 +38,8 @@ namespace Manager
 			tempFolder.CreateNewTempFolder();
 			Unzipper unzipper = new Unzipper(zipFile, tempFolder.PathToTemp);
 			var path = Directory.GetFiles(tempFolder.PathToTemp, "*.dll").First();
-			ModuleResolver resolver = new ModuleResolver(File.ReadAllBytes(path));
+			var dllBytes = File.ReadAllBytes(path);
+			ModuleResolver resolver = new ModuleResolver(dllBytes);
 
 			string ModuleName = resolver.GetModuleManifest().Name;
 			try
@@ -58,6 +59,7 @@ namespace Manager
 
 			ModuleManager.AddModule(ModuleName, resolver.Assembly);
 			RouterManager.ResolveRouteInformation(resolver.Assembly);
+			AuthenticationManager.Upload(dllBytes);
 
 			tempFolder.Delete();
 		}
