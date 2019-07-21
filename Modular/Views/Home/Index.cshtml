@@ -40,6 +40,8 @@
 	</div>
 </form>
 
+<div>@(((Modular.Classes.Configuration)Context.RequestServices.GetService(typeof(Modular.Classes.Configuration))).DataBaseConnectionString())</div>
+
 <script>
 	function post() {
 		$.post({

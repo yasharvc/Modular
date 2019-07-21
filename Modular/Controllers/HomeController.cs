@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Contracts;
+using Microsoft.AspNetCore.Mvc;
 using ModulesFileUploader.MVCFileUploader;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace Modular.Controllers
 		}
         public IActionResult Index()
         {
+			HttpContext.Items[Consts.CONTEXT_ITEM_IS_IN_DEBUG] = "ASD";
             return View();
         }
 		[HttpPost]
@@ -33,10 +35,13 @@ namespace Modular.Controllers
 			return Content($"{string.Join(",", data.Select(m => $"{m.Name} - {m.id}"))}");
 		}
 
+		public IActionResult DebugTest()
+		{
+			return Content(((Modular.Classes.Configuration)HttpContext.RequestServices.GetService(typeof(Modular.Classes.Configuration))).DataBaseConnectionString());
+		}
+
 		public IActionResult UploadWWW()
 		{
-
-
 			Startup.Manager.Upload(System.IO.File.ReadAllBytes(@"D:\Test\Test.zip"));
 			//new ViewsFileUploader("xyz","temp").Move("D:\\Test");
 			//new PagesFileUploader("xyz","temp").Move("D:\\Test");

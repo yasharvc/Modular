@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Modular.Classes;
 using System;
 using System.IO;
 using System.Linq;
@@ -44,6 +45,8 @@ namespace Modular
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 			services.AddHttpContextAccessor();
+
+			services.AddScoped<Configuration>();
 		}
 
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
