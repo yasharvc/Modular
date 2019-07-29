@@ -1,14 +1,10 @@
 ﻿using Contracts;
 using Contracts.Module;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace TestWebApplication
 {
-	public class Manifest : ModuleManifest,IThemeProvider
+	public class Manifest : ModuleManifest, IThemeProvider
 	{
 		public Manifest()
 		{

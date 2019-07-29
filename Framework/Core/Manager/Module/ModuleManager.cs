@@ -9,10 +9,10 @@ namespace Manager.Module
 {
 	public class ModuleManager : IManager
 	{
-		protected Dictionary<string, Assembly> ModuleAssemblies { get; } = new Dictionary<string, Assembly>();
+		protected Dictionary<string, ModuleAssembly> ModuleAssemblies { get; } = new Dictionary<string, ModuleAssembly>();
 		public string GenerateNewToken() => new ModuleGUIDMaker().GetNew();
 
-		public void AddModule(string ModuleName, Assembly assembly) => ModuleAssemblies[ModuleName] = assembly;
+		public void AddModule(string ModuleName, Assembly assembly) => ModuleAssemblies[ModuleName] = new ModuleAssembly(assembly);
 
 		public Assembly GetAssembly(string ModuleName)
 		{
@@ -25,7 +25,7 @@ namespace Manager.Module
 		{
 			var path = GetModuleDirectory(ModuleName);
 			var file = Directory.GetFiles(path, "*.dll").Single();
-			ModuleAssemblies[ModuleName] = Assembly.Load(File.ReadAllBytes(file));
+			ModuleAssemblies[ModuleName] = new ModuleAssembly(Assembly.Load(File.ReadAllBytes(file)));
 		}
 
 		private static string GetModuleDirectory(string ModuleName) => Path.Combine(Consts.MODULES_BASE_PATH, ModuleName);
@@ -37,5 +37,7 @@ namespace Manager.Module
 			if (ModuleAssemblies.ContainsKey(ModuleName))
 				ModuleAssemblies.Remove(ModuleName);
 		}
+
+		public IEnumerable<ModuleAssembly> GetModules() => ModuleAssemblies.Values;
 	}
 }

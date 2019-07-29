@@ -16,15 +16,9 @@ namespace Manager.Module
 		public ModuleManifest Manifest { get; } = new ModuleManifest();
 		public byte[] Bytes { get => _bytes; set { _bytes = value; assembly = Assembly.Load(value); } }
 		public string PhysicalPath { get => _physicalPath; set { _physicalPath = value; Bytes = File.ReadAllBytes(value); } }
-		
 
-		public ModuleAssembly(string name, string token, string physicalPath)
-		{
-			PhysicalPath = physicalPath;
-			Manifest.Name = name;
-			Manifest.Token = token;
-			Manifest.Version = assembly.GetName().Version;
-		}
+
+		//public ModuleAssembly(string name, string token, string physicalPath) : this(Assembly.Load(File.ReadAllBytes(physicalPath))) => PhysicalPath = physicalPath;
 
 		public ModuleAssembly(byte[] bytes)
 		{

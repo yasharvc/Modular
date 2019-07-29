@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Contracts.Module
 {
@@ -8,5 +9,6 @@ namespace Contracts.Module
 		public string Description { get; set; }
 		public string Token { get; set; }
 		public Version Version { get; set; }
+		public List<Dependency> Dependencies { get; set; } = new List<Dependency>();
 	}
 }
