@@ -1,13 +1,14 @@
 ﻿using Contracts.Authentication;
+using System;
 using System.Collections.Generic;
 
 namespace Manager.Authentication
 {
 	public class AuthenticationManager : IManager
 	{
-		protected Dictionary<string, IAuthenticationType> Authentications { get; } = new Dictionary<string, IAuthenticationType>();
+		protected Dictionary<string, AuthenticationResolver> Authentications { get; } = new Dictionary<string, AuthenticationResolver>();
 
-		public void AddAuthentication(IAuthenticationType authenticationType) => Authentications[authenticationType.Token] = authenticationType;
+		public void AddAuthentication(AuthenticationResolver authenticationResolver) => Authentications[authenticationResolver.Resolve().Token] = authenticationResolver;
 
 		public string GenerateNewToken()
 		{
@@ -19,14 +20,23 @@ namespace Manager.Authentication
 
 		public bool IsAuthenticationExists(string token) => Authentications.ContainsKey(token);
 
-		public IEnumerable<IAuthenticationType> GetInstalledAuthentications() => Authentications.Values;
+		public IEnumerable<Contracts.Authentication.Authentication> GetInstalledAuthentications()
+		{
+			List<Contracts.Authentication.Authentication> res = new List<Contracts.Authentication.Authentication>();
+			foreach (var item in Authentications.Values)
+			{
+				res.Add(item.Resolve());
+			}
+			return res;
+		}
 
 		public bool Upload(byte[] content)
 		{
 			try
 			{
-				var fx = new AuthenticationResolver(content).Resolve();
-				AddAuthentication(fx);
+				var AuthResolver = new AuthenticationResolver(content);
+				var fx = AuthResolver.Resolve();
+				AddAuthentication(AuthResolver);
 				return true;
 			}
 			catch
@@ -35,6 +45,12 @@ namespace Manager.Authentication
 			}
 		}
 
+		public Contracts.Authentication.Authentication GetAuthenticationByToken(string token)
+		{
+			if(Authentications.ContainsKey(token))
+				Authentications[token].Resolve();
+			throw new Contracts.Exceptions.System.AuthenticatonNotFoundException(token);
+		}
 
 	}
 }

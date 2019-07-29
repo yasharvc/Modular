@@ -1,4 +1,5 @@
 using Contracts;
+using Contracts.Exceptions.System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
@@ -95,10 +96,32 @@ namespace Modular
 				var Executer = Manager.GetExecuter(routeData.ModuleName);
 				SetModuleNameInHttpContext(context, routeData.ModuleName);
 				var x = routeData.GetAuthentcationType();
-				res.ParseAdditionalParameters(routeData.GetQueryString(req.Path));
-				var actionResult = Executer.InvokeAction(res, routeData, context);
-				context.Response.StatusCode = 200;
-				await actionResult.ExecuteResultAsync(actionContext);
+
+				var auth = Manager.AuthenticationManager.GetAuthenticationByToken(x.Token);
+				auth.HttpContext = context;
+
+				if (auth.IsAuthenticated())
+				{
+
+					res.ParseAdditionalParameters(routeData.GetQueryString(req.Path));
+					var actionResult = Executer.InvokeAction(res, routeData, context);
+					context.Response.StatusCode = 200;
+					await actionResult.ExecuteResultAsync(actionContext);
+				}
+				else
+				{
+					context.Response.Redirect(auth.LoginPagePath);
+				}
+			}
+			catch(MethodRuntimeException ex)
+			{
+				context.Response.StatusCode = 406;
+				await context.Response.WriteAsync($"<b>{ex.RealStackTrace}</b>");
+			}
+			catch(AuthenticatonNotFoundException ex)
+			{
+				context.Response.StatusCode = 401;
+				await context.Response.WriteAsync($"<div style='color:red;'>Authentication token not found : {ex.MissedToken}</div>");
 			}
 			catch (Exception ex)
 			{

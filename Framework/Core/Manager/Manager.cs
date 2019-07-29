@@ -17,6 +17,9 @@ namespace Manager
 {
 	public class Manager
 	{
+
+		public Manager() => LoadModules();
+
 		private readonly List<string> SpecialFolders = new List<string> { "temp" };
 		public AuthenticationManager AuthenticationManager { get; } = new AuthenticationManager();
 		public ModuleManager ModuleManager { get; } = new ModuleManager();

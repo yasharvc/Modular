@@ -37,9 +37,18 @@ namespace ControllerExecuter
 					i++;
 				}
 				var ctrl = Activator.CreateInstance(routeData.Controller) as Controller;
-				ctrl.ControllerContext = new ControllerContext();
-				ctrl.ControllerContext.HttpContext = context;
-				return (ActionResult)routeData.Controller.GetMethod(routeData.GetActionName()).Invoke(ctrl, sortedParameter.Values.ToArray());
+				ctrl.ControllerContext = new ControllerContext
+				{
+					HttpContext = context
+				};
+				try
+				{
+					return (ActionResult)routeData.Controller.GetMethod(routeData.GetActionName()).Invoke(ctrl, sortedParameter.Values.ToArray());
+				}
+				catch (Exception e)
+				{
+					throw new MethodRuntimeException(e.InnerException);
+				}
 			}
 			throw new MethodNotAllowedException(routeData.GetControllerName(), routeData.GetActionName(), requestInformation.Method);
 		}

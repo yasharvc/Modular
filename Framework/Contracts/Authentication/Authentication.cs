@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace Contracts.Authentication
 {
@@ -9,5 +7,7 @@ namespace Contracts.Authentication
 		public abstract string LoginPagePath { get; }
 
 		public abstract bool IsAuthenticated();
+
+		public HttpContext HttpContext { get; set; }
 	}
 }

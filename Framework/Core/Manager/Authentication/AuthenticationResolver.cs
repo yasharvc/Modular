@@ -1,9 +1,7 @@
 ﻿using Manager.Exceptions;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace Manager.Authentication
 {
@@ -26,7 +24,8 @@ namespace Manager.Authentication
 			try
 			{
 				return Activator.CreateInstance(authType) as Contracts.Authentication.Authentication;
-			}catch(Exception e)
+			}
+			catch (Exception e)
 			{
 				throw e;
 			}
