@@ -1,0 +1,21 @@
+﻿@using Contracts.Razor
+@{
+    ViewData["Title"] = "ورود به سیستم";
+	Layout = Html.GetThemeLayoutPath();
+}
+<link href="~/login/login.css" rel="stylesheet" />
+<div class="wrapper fadeInDown">
+	<div id="formContent">
+		<div class="fadeIn first">
+			<img src="http://icons.iconarchive.com/icons/oxygen-icons.org/oxygen/256/Places-user-identity-icon.png" id="icon" alt="شمایل کاربر" />
+		</div>
+		<form method="post">
+			<input type="text" id="user" class="fadeIn second" name="user" placeholder="نام کاربری">
+			<input type="text" id="pass" class="fadeIn third" name="pass" placeholder="رمز عبور">
+			<input type="submit" class="fadeIn fourth" value="ورود">
+		</form>
+		<div id="formFooter">
+			<a class="underlineHover" href="#">Copyright 2019</a>
+		</div>
+	</div>
+</div>

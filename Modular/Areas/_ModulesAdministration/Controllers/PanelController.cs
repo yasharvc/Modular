@@ -32,5 +32,11 @@ namespace Modular.Areas._ModulesAdministration.Controllers
 			Startup.Manager.AuthenticationManager.Upload(data);
 			return RedirectToAction(nameof(Index));
 		}
+
+		[HttpGet]
+		public IActionResult AllAuths()
+		{
+			return View(Startup.Manager.AuthenticationManager.GetInstalledAuthentications());
+		}
 	}
 }

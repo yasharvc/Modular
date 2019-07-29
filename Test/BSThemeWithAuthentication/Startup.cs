@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,11 +26,17 @@ namespace BSThemeWithAuthentication
 		{
 			services.Configure<CookiePolicyOptions>(options =>
 			{
-				// This lambda determines whether user consent for non-essential cookies is needed for a given request.
-				options.CheckConsentNeeded = context => true;
-				options.MinimumSameSitePolicy = SameSiteMode.None;
+				options.MinimumSameSitePolicy = SameSiteMode.Strict;
+				options.HttpOnly = HttpOnlyPolicy.None;
+				options.Secure = true
+				  ? CookieSecurePolicy.None : CookieSecurePolicy.Always;
 			});
 
+			services.AddSession(options =>
+			{
+				options.IdleTimeout = TimeSpan.FromMinutes(60);
+				options.Cookie.HttpOnly = true;
+			});
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 		}
@@ -49,7 +56,7 @@ namespace BSThemeWithAuthentication
 			app.UseStaticFiles();
 			app.UseCookiePolicy();
 
-			app.UseMvc();
+			app.UseMvcWithDefaultRoute();
 		}
 	}
 }

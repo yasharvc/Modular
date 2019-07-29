@@ -1,15 +1,11 @@
 ﻿using Contracts.Authentication;
 using Microsoft.AspNetCore.Http;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace TestWebApplication
 {
 	public class TestAuth : Authentication
 	{
-		private HttpContext HttpContext { get; set; }
 
 		public TestAuth(HttpContext context) => HttpContext = context;
 

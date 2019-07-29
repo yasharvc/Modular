@@ -1,8 +1,4 @@
 ﻿using Contracts.Authentication;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BSThemeWithAuthentication
 {
@@ -14,9 +10,6 @@ namespace BSThemeWithAuthentication
 
 		public override string GetDescription() => "دسترسی به سایت اصلی";
 
-		public override bool IsAuthenticated()
-		{
-			throw new NotImplementedException();
-		}
+		public override bool IsAuthenticated() => (HttpContext.Request.Cookies.ContainsKey("FX"));
 	}
 }

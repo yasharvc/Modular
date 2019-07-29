@@ -1,0 +1,10 @@
+﻿@model IEnumerable<Contracts.Authentication.Authentication>
+@{
+    Layout = "_Layout";
+}
+<ul>
+	@foreach (var item in Model)
+	{
+		<li>@item.Token</li>
+	}
+</ul>
