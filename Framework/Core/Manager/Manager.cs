@@ -48,11 +48,9 @@ namespace Manager
 			var path = Directory.GetFiles(tempFolder.PathToTemp, "*.dll").First();
 			var dllBytes = File.ReadAllBytes(path);
 
-			var resolver = new ModuleResolver(dllBytes);
+			var resolver = AddModule(dllBytes);
 
-			GetTheme(resolver);
 			ExtractFiles(tempFolder.PathToTemp, resolver.GetModuleManifest().Name);
-			AddModule(dllBytes, resolver);
 
 			tempFolder.Delete();
 		}
@@ -77,13 +75,17 @@ namespace Manager
 			new ModuleDllUploader(ModuleName).Move(tempFolder);
 		}
 
-		private void AddModule(byte[] dllBytes, ModuleResolver resolver)
+		private ModuleResolver AddModule(byte[] dllBytes, bool ignoreDependencyIndexUpdate = true)
 		{
+			var resolver = new ModuleResolver(dllBytes);
 			var manifest = resolver.GetModuleManifest();
-			UpdateDependencyIndex(manifest);
+			if (ignoreDependencyIndexUpdate)
+				UpdateDependencyIndex(manifest);
+			GetTheme(resolver);
 			ModuleManager.AddModule(manifest.Name, resolver.Assembly);
 			RouterManager.ResolveRouteInformation(resolver.Assembly);
 			AuthenticationManager.Upload(dllBytes);
+			return resolver;
 		}
 
 		private void UpdateDependencyIndex(ModuleManifest module)
@@ -147,8 +149,8 @@ namespace Manager
 				});
 			foreach (var dp in DependencyIndex)
 			{
-				var module = InspectFolder(Directory.GetDirectories($"{Consts.MODULES_BASE_PATH}/").FirstOrDefault(m => m.ToLower().EndsWith(dp.ModuleName.ToLower())));
-				AddModule(module);
+				var folder = Directory.GetDirectories($"{Consts.MODULES_BASE_PATH}/").FirstOrDefault(m => m.ToLower().EndsWith(dp.ModuleName.ToLower()));
+				AddModule(File.ReadAllBytes(Directory.GetFiles(folder, "*.dll").Single()), false);
 			}
 		}
 		private void LoadModulesWithFolders()
@@ -156,8 +158,7 @@ namespace Manager
 			var folders = Directory.GetDirectories($"{Consts.MODULES_BASE_PATH}/").Where(m => !SpecialFolders.Contains(m.Replace($"{Consts.MODULES_BASE_PATH}/", "").ToLower()));
 			foreach (var folder in folders)
 			{
-				var module = InspectFolder(folder);
-				AddModule(module);
+				AddModule(File.ReadAllBytes(Directory.GetFiles(folder, "*.dll").Single()));
 			}
 		}
 	}
