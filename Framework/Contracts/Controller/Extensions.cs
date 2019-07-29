@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace Contracts.Controller
 {
@@ -42,5 +43,8 @@ namespace Contracts.Controller
 			}
 			return name;
 		}
+
+
+		public static FileResult ToFileResult(this ControllerBase ctrl, string data, string filename) => ctrl.File(Encoding.UTF8.GetBytes(data), "application/octet-stream", filename);
 	}
 }

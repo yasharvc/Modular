@@ -5,6 +5,6 @@
 <ul>
 	@foreach (var item in Model)
 	{
-		<li>@item.Token</li>
+		<li>@item.GetType().FullName <a href="~/_ModulesAdministration/Panel/GetAuthCode?token=@item.Token" class="btn btn-primary"><i class="fa fa-code"></i></a></li>
 	}
 </ul>

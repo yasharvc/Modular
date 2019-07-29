@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using Contracts.Controller;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,6 +39,13 @@ namespace Modular.Areas._ModulesAdministration.Controllers
 		public IActionResult AllAuths()
 		{
 			return View(Startup.Manager.AuthenticationManager.GetInstalledAuthentications());
+		}
+
+		[HttpGet]
+		public ActionResult GetAuthCode(string token)
+		{
+			var auth = Startup.Manager.AuthenticationManager.GetAuthenticationByToken(token);
+			return this.ToFileResult(auth.GetCode(), "Authentication.cs");
 		}
 	}
 }
