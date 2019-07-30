@@ -92,7 +92,7 @@ namespace Modular
 
 			try
 			{
-				var routeData = Manager.RouterManager.GetRouteFor(req.Path);
+				var routeData = Manager.RouterManager.GetRouteFor(req.Path, res);
 				var Executer = Manager.GetExecuter(routeData.ModuleName);
 				SetModuleNameInHttpContext(context, routeData.ModuleName);
 				var x = routeData.GetAuthentcationType();

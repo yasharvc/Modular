@@ -31,7 +31,7 @@ namespace Modular.Areas._ModulesAdministration.Controllers
 		{
 			var data = new byte[module.Length];
 			module.OpenReadStream().Read(data, 0, (int)module.Length);
-			Startup.Manager.AuthenticationManager.Upload(data);
+			Startup.Manager.Upload(data);
 			return RedirectToAction(nameof(Index));
 		}
 

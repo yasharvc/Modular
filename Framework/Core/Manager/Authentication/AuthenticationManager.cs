@@ -48,7 +48,7 @@ namespace Manager.Authentication
 		public Contracts.Authentication.Authentication GetAuthenticationByToken(string token)
 		{
 			if(Authentications.ContainsKey(token))
-				Authentications[token].Resolve();
+				return Authentications[token].Resolve();
 			throw new Contracts.Exceptions.System.AuthenticatonNotFoundException(token);
 		}
 

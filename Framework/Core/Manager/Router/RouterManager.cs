@@ -4,6 +4,7 @@ using ControllerExecuter;
 using CoreCommons;
 using Manager.Module;
 using Microsoft.AspNetCore.Mvc;
+using RequestHandler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -81,11 +82,11 @@ namespace Manager.Router
 			return res;
 		}
 
-		public RouteInformation GetRouteFor(string url)
+		public RouteInformation GetRouteFor(string url, RequestInformation requestInfo)
 		{
 			if (!url.EndsWith('/'))
 				url += '/';
-			var res = Routes.Where(m => url.StartsWith(m.Path, StringComparison.OrdinalIgnoreCase)).OrderBy(m => m.Path.Length);
+			var res = Routes.Where(m => url.StartsWith(m.Path, StringComparison.OrdinalIgnoreCase) && m.AllowedMethods.Contains(requestInfo.Method)).OrderBy(m => m.Path.Length);
 			return res.Last();
 		}
 	}
