@@ -1,9 +1,12 @@
-﻿using Contracts.Exceptions.System;
+﻿using Contracts.Enums;
+using Contracts.Exceptions.System;
 using Contracts.Hub;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -46,5 +49,32 @@ namespace Contracts.Controller
 
 
 		public static FileResult ToFileResult(this ControllerBase ctrl, string data, string filename) => ctrl.File(Encoding.UTF8.GetBytes(data), "application/octet-stream", filename);
+
+		public static bool CheckMethod(this MethodInfo method, HttpMethod Method)
+		{
+			var httpAttributes = new List<string>
+			{
+				nameof(HttpDeleteAttribute),
+				nameof(HttpGetAttribute),
+				nameof(HttpHeadAttribute),
+				nameof(HttpPatchAttribute),
+				nameof(HttpPostAttribute),
+				nameof(HttpPutAttribute)
+			};
+			if (!method.GetCustomAttributes().Any(m => httpAttributes.Contains(m.GetType().Name)))
+				return true;
+			switch (Method)
+			{
+				case HttpMethod.GET:
+					return method.HasGetAttribute();
+				case HttpMethod.POST:
+					return method.HasPostAttribute();
+				case HttpMethod.DELETE:
+					return method.HasDeleteAttribute();
+				case HttpMethod.PUT:
+					return method.HasPutAttribute();
+			}
+			throw new Exception();
+		}
 	}
 }

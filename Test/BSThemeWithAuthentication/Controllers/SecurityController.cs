@@ -1,4 +1,5 @@
 ﻿using Contracts.Authentication;
+using Contracts.Controller;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BSThemeWithAuthentication.Controllers
@@ -15,7 +16,7 @@ namespace BSThemeWithAuthentication.Controllers
 			};
 			if (auth.IsAuthenticated())
 				return Redirect("/Home/Index");
-            return View();
+            return this.GetView();
         }
 
 		[HttpPost]

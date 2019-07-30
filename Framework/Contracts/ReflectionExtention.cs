@@ -2,7 +2,7 @@
 using System;
 using System.Reflection;
 
-namespace CoreCommons
+namespace Contracts
 {
 	public static class ReflectionExtention
 	{

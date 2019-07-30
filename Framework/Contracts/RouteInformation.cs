@@ -1,5 +1,7 @@
 ﻿using Contracts.Authentication;
+using Contracts.Controller;
 using Contracts.Enums;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,12 +46,13 @@ namespace Contracts
 			}
 		}
 
-		public IAuthenticationType GetAuthentcationType()
+		public IAuthenticationType GetAuthentcationType(HttpMethod httpMethod)
 		{
 			var res = new AnonymousAuthentication();
+
 			try
 			{
-				var method = Controller.GetMethods().SingleOrDefault(m => m.Name.Equals(GetActionName(), StringComparison.OrdinalIgnoreCase));
+				var method = Controller.GetMethods().SingleOrDefault(m => m.Name.Equals(GetActionName(), StringComparison.OrdinalIgnoreCase) && m.CheckMethod(httpMethod));
 				if(method.GetCustomAttribute<AuthenticationTypeAttribute>() == null)
 				{
 					var classAttr = Controller.GetCustomAttribute<AuthenticationTypeAttribute>();

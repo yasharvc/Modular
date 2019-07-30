@@ -1,4 +1,5 @@
 ﻿using Contracts;
+using Contracts.Controller;
 using Contracts.Exceptions.Application;
 using Contracts.Exceptions.System;
 using CoreCommons;
@@ -43,15 +44,18 @@ namespace ControllerExecuter
 				};
 				try
 				{
-					return (ActionResult)routeData.Controller.GetMethod(routeData.GetActionName()).Invoke(ctrl, sortedParameter.Values.ToArray());
+					return (ActionResult)GetMethod(routeData, requestInformation).Invoke(ctrl, sortedParameter.Values.ToArray());
 				}
 				catch (Exception e)
 				{
-					throw new MethodRuntimeException(e.InnerException);
+					throw new MethodRuntimeException(e.InnerException != null ? e.InnerException : e);
 				}
 			}
 			throw new MethodNotAllowedException(routeData.GetControllerName(), routeData.GetActionName(), requestInformation.Method);
 		}
+
+		private MethodInfo GetMethod(RouteInformation routeData, RequestInformation requestInformation) => routeData.Controller.GetMethods().Single(m => m.Name.Equals(routeData.GetActionName(), StringComparison.OrdinalIgnoreCase) && m.CheckMethod(requestInformation.Method));
+				
 
 		private object GetComplexParameter(ParameterInfo parameter, List<RequestParameter> tempParameters) =>
 			parameter.CastToType(tempParameters);
