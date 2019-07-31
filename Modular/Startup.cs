@@ -1,6 +1,7 @@
 using Contracts;
 using Contracts.Exceptions.System;
 using Contracts.Hub;
+using Contracts.Module;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Modular.Classes;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -180,6 +182,8 @@ namespace Modular
 		}
 
 		public string GetConnectionString() => httpContextAccessor.HttpContext.RequestServices.GetRequiredService<Configuration>().DataBaseConnectionString();
+
+		public IEnumerable<ModuleManifest> GetModuleList() => Manager.ModuleManager.GetModules().Select(m => m.Manifest);
 
 
 		#endregion
