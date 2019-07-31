@@ -14,6 +14,10 @@ namespace Contracts.Controller
 {
 	public static class Extensions
 	{
+		public static ViewResult View(this Microsoft.AspNetCore.Mvc.Controller ctrl, [CallerMemberName] string name = "", object model = null)
+		{
+			return ctrl.GetView(name, model);
+		}
 		public static ViewResult GetView(this Microsoft.AspNetCore.Mvc.Controller ctrl, [CallerMemberName] string name = "", object model = null)
 		{
 			name = GetLastMethodName(name);

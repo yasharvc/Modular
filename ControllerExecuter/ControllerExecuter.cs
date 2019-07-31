@@ -55,7 +55,6 @@ namespace ControllerExecuter
 		}
 
 		private MethodInfo GetMethod(RouteInformation routeData, RequestInformation requestInformation) => routeData.Controller.GetMethods().Single(m => m.Name.Equals(routeData.GetActionName(), StringComparison.OrdinalIgnoreCase) && m.CheckMethod(requestInformation.Method));
-				
 
 		private object GetComplexParameter(ParameterInfo parameter, List<RequestParameter> tempParameters) =>
 			parameter.CastToType(tempParameters);

@@ -13,7 +13,7 @@ namespace Manager.Module
 		private byte[] _bytes;
 		private string _physicalPath;
 
-		public ModuleManifest Manifest { get; } = new ModuleManifest();
+		public ModuleManifest Manifest { get; }
 		public byte[] Bytes { get => _bytes; set { _bytes = value; assembly = Assembly.Load(value); } }
 		public string PhysicalPath { get => _physicalPath; set { _physicalPath = value; Bytes = File.ReadAllBytes(value); } }
 

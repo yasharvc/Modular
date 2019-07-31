@@ -39,5 +39,7 @@ namespace Manager.Module
 		}
 
 		public IEnumerable<ModuleAssembly> GetModules() => ModuleAssemblies.Values;
+
+		public ModuleAssembly this[string name] => ModuleAssemblies[name];
 	}
 }
