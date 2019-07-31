@@ -12,8 +12,8 @@ namespace Contracts.Module
 		public string Token { get; set; }
 		public Version Version { get; set; }
 		public List<Dependency> Dependencies { get; set; } = new List<Dependency>();
-		public Dictionary<string, BaseViewComponent> HomePageViewComponents { get; } = new Dictionary<string, BaseViewComponent>();
-		public Dictionary<string, BaseViewComponent> ViewComponents { get; } = new Dictionary<string, BaseViewComponent>();
+		public abstract Dictionary<string, BaseViewComponent> HomePageViewComponents { get; }
+		public abstract Dictionary<string, BaseViewComponent> ViewComponents { get; }
 		public abstract BaseViewComponent GetCustomViewComponent(string name);
 	}
 }

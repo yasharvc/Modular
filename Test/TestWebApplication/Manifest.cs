@@ -1,5 +1,7 @@
 ﻿using Contracts;
 using Contracts.Module;
+using Contracts.ViewComponent;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace TestWebApplication
@@ -15,5 +17,11 @@ namespace TestWebApplication
 		}
 
 		public string LayoutPathInsideModule => "/Views/Shared/_Layout.cshtml";
+
+		public override Dictionary<string, BaseViewComponent> HomePageViewComponents => new Dictionary<string, BaseViewComponent>();
+
+		public override Dictionary<string, BaseViewComponent> ViewComponents => new Dictionary<string, BaseViewComponent>();
+
+		public override BaseViewComponent GetCustomViewComponent(string name) => null;
 	}
 }

@@ -1,5 +1,8 @@
-﻿using Contracts;
+﻿using BSThemeWithAuthentication.Components;
+using Contracts;
 using Contracts.Module;
+using Contracts.ViewComponent;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace BSThemeWithAuthentication
@@ -15,5 +18,24 @@ namespace BSThemeWithAuthentication
 		}
 
 		public string LayoutPathInsideModule => "/Views/Shared/_Layout.cshtml";
+
+		public override Dictionary<string, BaseViewComponent> HomePageViewComponents
+		{
+			get
+			{
+				var components = new Dictionary<string, BaseViewComponent>();
+				components["Simple"] = new SimpleViewComponent();
+				return components;
+			}
+		}
+
+		public override Dictionary<string, BaseViewComponent> ViewComponents => new Dictionary<string, BaseViewComponent>();
+
+		public override BaseViewComponent GetCustomViewComponent(string name)
+		{
+			if (name.Equals("simple", System.StringComparison.OrdinalIgnoreCase))
+				return new SimpleViewComponent();
+			return null;
+		}
 	}
 }

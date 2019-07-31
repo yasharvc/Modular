@@ -1,4 +1,5 @@
-﻿using Contracts.ViewComponent;
+﻿using Contracts;
+using Contracts.ViewComponent;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -19,7 +20,7 @@ namespace Modular.Components
 				cmp = manifest.GetCustomViewComponent(viewComponentName);
 			if (cmp != null)
 			{
-				HttpContext.Request.Headers["ModuleName"] = new Microsoft.Extensions.Primitives.StringValues(moduleName);
+				HttpContext.Items[Consts.CONTEXT_ITEM_KEY_THEME_MODULE_NAME] = moduleName;
 				cmp.HttpContext = HttpContext;
 				return await cmp.InvokeAsync();
 			}
