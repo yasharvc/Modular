@@ -19,9 +19,10 @@ using System.Threading.Tasks;
 
 namespace Modular
 {
-	public class Startup
+	public class Startup : IInvocationHubProvider
 	{
 		public static Manager.Manager Manager { get; } = new Manager.Manager();
+		private IHttpContextAccessor httpContextAccessor = null;
 		public Startup(IConfiguration configuration)
 		{
 			Configuration = configuration;
@@ -49,9 +50,11 @@ namespace Modular
 			services.AddHttpContextAccessor();
 
 			services.AddScoped<Configuration>();
+
+			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 		}
 
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+		public void Configure(IApplicationBuilder app, IHostingEnvironment env, IHttpContextAccessor accessor)
 		{
 			if (env.IsDevelopment())
 			{
@@ -82,7 +85,7 @@ namespace Modular
 					await Handle404(context, next);
 				}
 			});
-
+			httpContextAccessor = accessor;
 			SetupInvocationHubHandling();
 		}
 
@@ -125,7 +128,7 @@ namespace Modular
 			catch(MethodRuntimeException ex)
 			{
 				context.Response.StatusCode = 406;
-				await context.Response.WriteAsync($"<b>{ex.RealStackTrace}</b>");
+				await context.Response.WriteAsync($"{ex.Message} <b>{ex.RealStackTrace}</b>");
 			}
 			catch(AuthenticatonNotFoundException ex)
 			{
@@ -134,6 +137,8 @@ namespace Modular
 			}
 			catch (Exception ex)
 			{
+				if(ex is MethodRuntimeException)
+					await context.Response.WriteAsync($"<b>{(ex as MethodRuntimeException).RealStackTrace}</b>");
 				context.Response.StatusCode = 418;
 				await context.Response.WriteAsync(ex.Message);//$"{res.ContentType} : {string.Join(" AND ", res.RequestParameters.Select(m => $"{m.Name} - {m.Value}"))} = {res.Method}");//string.Join(",",form.Select(m => $"{m.Key} = {m.Value[0]}")));
 			}
@@ -173,6 +178,9 @@ namespace Modular
 		{
 			return new ActionDescriptor();
 		}
+
+		public string GetConnectionString() => httpContextAccessor.HttpContext.RequestServices.GetRequiredService<Configuration>().DataBaseConnectionString();
+
 
 		#endregion
 	}
