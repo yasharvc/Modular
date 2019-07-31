@@ -13,7 +13,7 @@ namespace Manager.Module
 		private byte[] _bytes;
 		private string _physicalPath;
 
-		public ModuleManifest Manifest { get; }
+		public ModuleManifest Manifest { get; protected set; }
 		public byte[] Bytes { get => _bytes; set { _bytes = value; assembly = Assembly.Load(value); } }
 		public string PhysicalPath { get => _physicalPath; set { _physicalPath = value; Bytes = File.ReadAllBytes(value); } }
 
@@ -34,11 +34,12 @@ namespace Manager.Module
 		private void ResolveNameAndToken()
 		{
 			var manifest = GetManifest();
-			Manifest.Name = manifest.Name;
-			Manifest.Token = manifest.Token;
+			//Manifest.Name = manifest.Name;
+			//Manifest.Token = manifest.Token;
+			Manifest = manifest;
 		}
 
-		private ModuleManifest GetManifest() => Activator.CreateInstance(assembly.GetTypes().Single(m => m.IsSubclassOf(typeof(ModuleManifest)))) as ModuleManifest;
+		private ModuleManifest GetManifest() => Activator.CreateInstance(assembly.GetTypes().Single(m => m.IsAssignableFrom(typeof(ModuleManifest)) || m.IsSubclassOf(typeof(ModuleManifest)))) as ModuleManifest;
 
 		public IThemeProvider GetThemeProvider() => Activator.CreateInstance(assembly.GetTypes().Single(m => m.GetInterface(nameof(IThemeProvider)) != null)) as IThemeProvider;
 

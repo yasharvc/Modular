@@ -24,7 +24,7 @@ namespace BSThemeWithAuthentication
 			get
 			{
 				var components = new Dictionary<string, BaseViewComponent>();
-				components["Simple"] = new SimpleViewComponent();
+				components["KPI"] = new KPIViewComponent();
 				return components;
 			}
 		}
@@ -33,8 +33,8 @@ namespace BSThemeWithAuthentication
 
 		public override BaseViewComponent GetCustomViewComponent(string name)
 		{
-			if (name.Equals("simple", System.StringComparison.OrdinalIgnoreCase))
-				return new SimpleViewComponent();
+			if (name.Equals("kpi", System.StringComparison.OrdinalIgnoreCase))
+				return new KPIViewComponent();
 			return null;
 		}
 	}

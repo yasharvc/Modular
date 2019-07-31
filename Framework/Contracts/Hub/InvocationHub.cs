@@ -7,7 +7,7 @@
 		{
 			if (desired.HasValue)
 				return desired.Value;
-			return InvocationHubProvider != null;
+			return InvocationHubProvider == null;
 		}
 	}
 }

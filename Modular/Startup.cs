@@ -1,5 +1,6 @@
 using Contracts;
 using Contracts.Exceptions.System;
+using Contracts.Hub;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
@@ -81,6 +82,13 @@ namespace Modular
 					await Handle404(context, next);
 				}
 			});
+
+			SetupInvocationHubHandling();
+		}
+
+		private void SetupInvocationHubHandling()
+		{
+			InvocationHub.InvocationHubProvider = this;
 		}
 
 		private async Task Handle404(HttpContext context, Func<Task> next)

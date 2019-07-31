@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace BSThemeWithAuthentication.Components
 {
 	[ViewComponent(Name ="KPI")]
-	public class SimpleViewComponent : BaseViewComponent
+	public class KPIViewComponent : BaseViewComponent
 	{
 		public override async Task<IViewComponentResult> InvokeAsync()
 		{
@@ -26,7 +26,7 @@ namespace BSThemeWithAuthentication.Components
 			//	if (connection.State == System.Data.ConnectionState.Open)
 			//		connection.Close();
 			//}
-			return await Task.FromResult(GetView("TestModule", model: count));
+			return await Task.FromResult(GetView(new Manifest().Name, model: count));
 		}
 	}
 }
