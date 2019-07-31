@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Contracts.Controller;
 
 namespace BSThemeWithAuthentication.Controllers
 {
@@ -6,7 +7,7 @@ namespace BSThemeWithAuthentication.Controllers
     {
         public IActionResult Index()
         {
-            return View();
+            return this.GetView();
         }
     }
 }

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Contracts.Module;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 
 namespace Contracts.Hub
@@ -40,6 +42,18 @@ namespace Contracts.Hub
 				return (resultContent);
 			}
 			return "";
+		}
+
+		public static IEnumerable<ModuleManifest> GetModules()
+		{
+			if (IsModuleInDebugMode())
+				return new List<ModuleManifest> {
+					new DummyManifest("Dummy1","First dummy module","Description for first dummy module"),
+					new DummyManifest("Dummy2","Second dummy module","Description for second dummy module"),
+					new DummyManifest("Dummy3","Third dummy module","Description for third dummy module")
+				};
+			else
+				return InvocationHubProvider.GetModuleList().Where(m => m.Status == ModuleStatus.Enable);
 		}
 	}
 }

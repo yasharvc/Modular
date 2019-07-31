@@ -13,11 +13,6 @@ namespace Modular.Controllers
 			public string Name { get; set; }
 			public int id { get; set; }
 		}
-        public IActionResult Index()
-        {
-			HttpContext.Items[Consts.CONTEXT_ITEM_IS_IN_DEBUG] = "ASD";
-            return View();
-        }
 		[HttpPost]
 		public IActionResult Form(C1 test)
 		{

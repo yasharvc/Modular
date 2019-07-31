@@ -56,6 +56,8 @@ namespace Manager
 			ExtractFiles(tempFolder.PathToTemp, resolver.GetModuleManifest().Name);
 
 			tempFolder.Delete();
+
+			ModuleManager.ChangeModuleStatus(resolver.GetModuleManifest().Name, ModuleStatus.Enable);
 		}
 
 		private void GetTheme(ModuleResolver resolver)
@@ -154,6 +156,7 @@ namespace Manager
 			{
 				var folder = Directory.GetDirectories($"{Consts.MODULES_BASE_PATH}/").FirstOrDefault(m => m.ToLower().EndsWith(dp.ModuleName.ToLower()));
 				AddModule(File.ReadAllBytes(Directory.GetFiles(folder, "*.dll").Single()), false);
+				ModuleManager.ChangeModuleStatus(dp.ModuleName, ModuleStatus.Enable);
 			}
 		}
 		private void LoadModulesWithFolders()
@@ -161,7 +164,8 @@ namespace Manager
 			var folders = Directory.GetDirectories($"{Consts.MODULES_BASE_PATH}/").Where(m => !SpecialFolders.Contains(m.Replace($"{Consts.MODULES_BASE_PATH}/", "").ToLower()));
 			foreach (var folder in folders)
 			{
-				AddModule(File.ReadAllBytes(Directory.GetFiles(folder, "*.dll").Single()));
+				var mdl = AddModule(File.ReadAllBytes(Directory.GetFiles(folder, "*.dll").Single()));
+				ModuleManager.ChangeModuleStatus(mdl.GetModuleManifest().Name, ModuleStatus.Enable);
 			}
 		}
 	}

@@ -1,6 +1,8 @@
 ﻿using BSThemeWithAuthentication.Components;
+using BSThemeWithAuthentication.Controllers;
 using Contracts;
 using Contracts.Module;
+using Contracts.Module.Menu;
 using Contracts.ViewComponent;
 using System.Collections.Generic;
 using System.Reflection;
@@ -36,6 +38,22 @@ namespace BSThemeWithAuthentication
 			if (name.Equals("kpi", System.StringComparison.OrdinalIgnoreCase))
 				return new KPIViewComponent();
 			return null;
+		}
+
+		public override IEnumerable<IMenu> Menus
+		{
+			get
+			{
+				List<IMenu> res = new List<IMenu>();
+				var menu = new Menu
+				{
+					Title = "تست",
+					Icon = "fa fa-cogs",
+					Link = new Link { Action = nameof(GridTestController.Index), Controller = typeof(GridTestController) }
+				};
+				res.Add(menu);
+				return res;
+			}
 		}
 	}
 }

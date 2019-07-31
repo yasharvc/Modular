@@ -28,7 +28,7 @@ namespace BSThemeWithAuthentication.Controllers
 		
 		public JsonResult ConnError()
 		{
-			SqlConnection connection = new SqlConnection("Data Source=192.168.0.56;Initial Catalog=CMMS_WEBasdfsdf;User ID=sa;Password=1111;");
+			SqlConnection connection = new SqlConnection("Data Source=192.168.0.56;Initial Catalog=CMMS_WEB_DEBUG;User ID=sa;Password=1122341;");
 			connection.Open();
 			return Json(new { sdfsdf = "" });
 		}

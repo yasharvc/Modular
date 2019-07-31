@@ -10,6 +10,7 @@ namespace Manager.Module
 	public class ModuleManager : IManager
 	{
 		protected Dictionary<string, ModuleAssembly> ModuleAssemblies { get; } = new Dictionary<string, ModuleAssembly>();
+		
 		public string GenerateNewToken() => new ModuleGUIDMaker().GetNew();
 
 		public void AddModule(string ModuleName, Assembly assembly) => ModuleAssemblies[ModuleName] = new ModuleAssembly(assembly);
@@ -41,5 +42,7 @@ namespace Manager.Module
 		public IEnumerable<ModuleAssembly> GetModules() => ModuleAssemblies.Values;
 
 		public ModuleAssembly this[string name] => ModuleAssemblies[name];
+
+		public void ChangeModuleStatus(string moduleName, ModuleStatus status) => ModuleAssemblies[moduleName].ChangeStatus(status);
 	}
 }
