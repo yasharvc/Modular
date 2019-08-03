@@ -87,7 +87,7 @@ namespace Manager
 			if (ignoreDependencyIndexUpdate)
 				UpdateDependencyIndex(manifest);
 			GetTheme(resolver);
-			ModuleManager.AddModule(manifest.Name, resolver.Assembly);
+			ModuleManager.AddModule(manifest, resolver.Assembly);
 			RouterManager.ResolveRouteInformation(resolver.Assembly);
 			AuthenticationManager.Upload(dllBytes);
 			return resolver;

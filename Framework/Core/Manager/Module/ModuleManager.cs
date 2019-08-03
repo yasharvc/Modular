@@ -1,5 +1,6 @@
 ﻿using Contracts;
 using Contracts.Module;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,24 +10,25 @@ namespace Manager.Module
 {
 	public class ModuleManager : IManager
 	{
-		protected Dictionary<string, ModuleAssembly> ModuleAssemblies { get; } = new Dictionary<string, ModuleAssembly>();
+		protected Dictionary<string, Tuple<ModuleAssembly, ModuleMeta>> ModuleAssemblies { get; } = new Dictionary<string, Tuple<ModuleAssembly, ModuleMeta>>();
 		
 		public string GenerateNewToken() => new ModuleGUIDMaker().GetNew();
 
-		public void AddModule(string ModuleName, Assembly assembly) => ModuleAssemblies[ModuleName] = new ModuleAssembly(assembly);
+		public void AddModule(ModuleManifest manifest, Assembly assembly) => ModuleAssemblies[manifest.Name] = new Tuple<ModuleAssembly, ModuleMeta>(new ModuleAssembly(assembly), new ModuleMeta(assembly, manifest));
 
 		public Assembly GetAssembly(string ModuleName)
 		{
 			if (!ModuleAssemblies.ContainsKey(ModuleName))
 				LoadModuleDll(ModuleName);
-			return ModuleAssemblies[ModuleName];
+			return ModuleAssemblies[ModuleName].Item1;
 		}
 
 		private void LoadModuleDll(string ModuleName)
 		{
 			var path = GetModuleDirectory(ModuleName);
 			var file = Directory.GetFiles(path, "*.dll").Single();
-			ModuleAssemblies[ModuleName] = new ModuleAssembly(Assembly.Load(File.ReadAllBytes(file)));
+			var asm = new ModuleAssembly(Assembly.Load(File.ReadAllBytes(file)));
+			ModuleAssemblies[ModuleName] = new Tuple<ModuleAssembly, ModuleMeta>(asm, new ModuleMeta(asm, asm.Manifest));
 		}
 
 		private static string GetModuleDirectory(string ModuleName) => Path.Combine(Consts.MODULES_BASE_PATH, ModuleName);
@@ -39,10 +41,14 @@ namespace Manager.Module
 				ModuleAssemblies.Remove(ModuleName);
 		}
 
-		public IEnumerable<ModuleAssembly> GetModules() => ModuleAssemblies.Values;
+		public IEnumerable<ModuleAssembly> GetModules() => ModuleAssemblies.Values.Select(m => m.Item1);
 
-		public ModuleAssembly this[string name] => ModuleAssemblies[name];
+		public ModuleAssembly this[string name] => ModuleAssemblies[name].Item1;
 
-		public void ChangeModuleStatus(string moduleName, ModuleStatus status) => ModuleAssemblies[moduleName].ChangeStatus(status);
+		public void ChangeModuleStatus(string moduleName, ModuleStatus status) => ModuleAssemblies[moduleName].Item1.ChangeStatus(status);
+
+		public string GetModuleCode(string moduleName) => ModuleAssemblies[moduleName].Item2.ServiceMeta.ToString();
+
+		public ModuleMeta GetModuleMeta(string moduleName) => ModuleAssemblies[moduleName].Item2;
 	}
 }

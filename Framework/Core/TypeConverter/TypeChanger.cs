@@ -17,6 +17,8 @@ namespace TypeConverter
 		{
 			if (destType == typeof(void))
 				return null;
+			if (destType.IsPrimitiveType())
+				return Convert.ChangeType(input, destType);
 			object res = CreateObjectByType(destType);
 			if (res.GetType() == null)
 				return null;
@@ -162,11 +164,16 @@ namespace TypeConverter
 
 		private object CreateObjectByType(Type type)
 		{
+			if(type.IsPrimitiveType())
+			{
+				if (type == typeof(string))
+					return "";
+			}
 			try
 			{
 				return Activator.CreateInstance(type);
 			}
-			catch
+			catch(Exception e)
 			{
 				return assembly.CreateInstance(type.FullName);
 			}
