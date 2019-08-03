@@ -18,7 +18,7 @@ namespace ControllerExecuter
 		Assembly Assembly { get; set; }
 		public ControllerExecuter(Assembly assembly = null) => Assembly = assembly;
 
-		public ActionResult InvokeAction(RequestInformation requestInformation, RouteInformation routeData, HttpContext context)
+		public object InvokeAction(RequestInformation requestInformation, RouteInformation routeData, HttpContext context)
 		{
 			if (routeData.AllowedMethods.Contains(requestInformation.Method))
 			{
@@ -44,17 +44,17 @@ namespace ControllerExecuter
 				};
 				try
 				{
-					return (ActionResult)GetMethod(routeData, requestInformation).Invoke(ctrl, sortedParameter.Values.ToArray());
+					return GetMethod(routeData, requestInformation).Invoke(ctrl, sortedParameter.Values.ToArray());
 				}
 				catch (Exception e)
 				{
 					throw new MethodRuntimeException(e.InnerException != null ? e.InnerException : e);
 				}
 			}
-			throw new MethodNotAllowedException(routeData.GetControllerName(), routeData.GetActionName(), requestInformation.Method);
+			throw new MethodNotAllowedException(routeData.GetControllerName(), routeData.MethodName, requestInformation.Method);
 		}
 
-		private MethodInfo GetMethod(RouteInformation routeData, RequestInformation requestInformation) => routeData.Controller.GetMethods().Single(m => m.Name.Equals(routeData.GetActionName(), StringComparison.OrdinalIgnoreCase) && m.CheckMethod(requestInformation.Method));
+		private MethodInfo GetMethod(RouteInformation routeData, RequestInformation requestInformation) => routeData.Controller.GetMethods().Single(m => m.Name.Equals(routeData.MethodName, StringComparison.OrdinalIgnoreCase) && m.CheckMethod(requestInformation.Method));
 
 		private object GetComplexParameter(ParameterInfo parameter, List<RequestParameter> tempParameters) =>
 			parameter.CastToType(tempParameters);

@@ -120,7 +120,10 @@ namespace Modular
 					res.ParseAdditionalParameters(routeData.GetQueryString(req.Path));
 					var actionResult = Executer.InvokeAction(res, routeData, context);
 					context.Response.StatusCode = 200;
-					await actionResult.ExecuteResultAsync(actionContext);
+					if (actionResult is ActionResult)
+						await (actionResult as ActionResult).ExecuteResultAsync(actionContext);
+					else
+						await context.Response.WriteAsync(actionResult as string);
 				}
 				else
 				{

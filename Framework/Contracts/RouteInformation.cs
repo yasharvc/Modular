@@ -16,11 +16,13 @@ namespace Contracts
 		public List<HttpMethod> AllowedMethods { get; set; } = new List<HttpMethod>();
 		public Type Controller { get; set; }
 		public List<ParameterInfo> Parameters { get; set; } = new List<ParameterInfo>();
+		public string MethodName { get; set; } = "";
+		public string RouteActionName { get; set; } = "";
 
 		public string ModuleName { get; set; }
 
-		public string GetControllerName() => Path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries)[0];
-		public string GetActionName() => Path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries)[1];
+		public string GetControllerName() => Controller.Name.Replace("controller","",StringComparison.OrdinalIgnoreCase);// Path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries)[0];
+		public string GetActionName() => RouteActionName;// Path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries)[1];
 
 		public string GetQueryString(string url)
 		{
@@ -35,7 +37,7 @@ namespace Contracts
 			{
 				fixedURL = $"{fixedURL}/";
 			}
-			string path = $"/{GetControllerName()}/{GetActionName()}/";
+			string path = $"{(Prefix.Length > 0 ? Prefix + (Prefix.EndsWith("/") ? "" : "/") : "/")}{GetControllerName()}/{GetActionName()}/";
 			if (fixedURL.StartsWith(path, StringComparison.OrdinalIgnoreCase))
 			{
 				return url.Substring(path.Length - (!haveFirstSlash ? 1 : 0) - (!haveLastSlash ? 1 : 0));
@@ -52,7 +54,7 @@ namespace Contracts
 
 			try
 			{
-				var method = Controller.GetMethods().SingleOrDefault(m => m.Name.Equals(GetActionName(), StringComparison.OrdinalIgnoreCase) && m.CheckMethod(httpMethod));
+				var method = Controller.GetMethods().SingleOrDefault(m => m.Name.Equals(MethodName, StringComparison.OrdinalIgnoreCase) && m.CheckMethod(httpMethod));
 				if(method.GetCustomAttribute<AuthenticationTypeAttribute>() == null)
 				{
 					var classAttr = Controller.GetCustomAttribute<AuthenticationTypeAttribute>();

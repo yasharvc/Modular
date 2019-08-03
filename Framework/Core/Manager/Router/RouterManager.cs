@@ -1,7 +1,5 @@
 ﻿using Contracts;
 using Contracts.Module;
-using ControllerExecuter;
-using CoreCommons;
 using Manager.Module;
 using Microsoft.AspNetCore.Mvc;
 using RequestHandler;
@@ -9,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace Manager.Router
 {
@@ -32,9 +29,10 @@ namespace Manager.Router
 			var Types = assembly.GetTypes().Where(m => m.IsSubclassOf(typeof(Controller)));
 			foreach (var type in Types)
 			{
+				var ctrlRouteAttr = type.GetCustomAttribute<RouteAttribute>();
 				MethodInfo[] methods = GetMethods(type);
 				foreach (var method in methods)
-					AddMethodToRoute(type, method, moduleManifest.Name);
+					AddMethodToRoute(type, method, moduleManifest.Name, ctrlRouteAttr);
 			}
 		}
 
@@ -45,20 +43,43 @@ namespace Manager.Router
 								   BindingFlags.Public);
 		}
 
-		private void AddMethodToRoute(Type type, MethodInfo method, string moduleName)
+		private void AddMethodToRoute(Type type, MethodInfo method, string moduleName, RouteAttribute ctrlRouteAttr)
 		{
 			//TODO: Get Controller Methods
 			var actionMethods = GetActionMethods(method);
+			var prefix = $"/{type.Name.Replace("Controller", "", StringComparison.OrdinalIgnoreCase)}";
+			var path = "";
+			var routeActionName = method.Name;
+			if(ctrlRouteAttr != null)
+			{
+				prefix = $"/{CompileTemplate(ctrlRouteAttr.Template,type)}";
+			}
+			var methodRouteAttr = method.GetCustomAttribute<RouteAttribute>();
+			if(methodRouteAttr != null)
+				routeActionName = CompileTemplate(methodRouteAttr.Template, type);
+			path = $"{prefix}/{routeActionName}";
+			try
+			{
+				prefix = path.Substring(0, path.IndexOf(type.Name.Replace("controller", "", StringComparison.OrdinalIgnoreCase)) - 1);
+			}
+			catch
+			{
+				prefix = "";
+			}
 			Routes.Add(new RouteInformation
 			{
 				AllowedMethods = actionMethods,
 				Controller = type,
 				Parameters = method.GetParameters().ToList(),
-				Path = $"/{type.Name.Replace("Controller", "", StringComparison.OrdinalIgnoreCase)}/{method.Name}/",
-				Prefix = $"",
-				ModuleName = moduleName
+				Path = path,
+				Prefix = prefix,
+				ModuleName = moduleName,
+				MethodName = method.Name,
+				RouteActionName = routeActionName
 			});
 		}
+
+		private string CompileTemplate(string template, Type type) => template.Replace("[controller]", type.Name.Replace("controller", "", StringComparison.OrdinalIgnoreCase), StringComparison.OrdinalIgnoreCase);
 
 		private List<Contracts.Enums.HttpMethod> GetActionMethods(MethodInfo method)
 		{
