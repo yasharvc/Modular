@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Contracts.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace Contracts.Authentication
 {
@@ -7,6 +8,8 @@ namespace Contracts.Authentication
 		public abstract string LoginPagePath { get; }
 
 		public abstract bool IsAuthenticated();
+
+		public abstract User GetCurrentUser(HttpContext ctx);
 
 		public HttpContext HttpContext { get; set; }
 	}

@@ -1,5 +1,6 @@
 ﻿using Contracts.Models;
 using Microsoft.AspNetCore.Http;
+using System.Diagnostics;
 
 namespace DefaultTheme
 {
@@ -44,8 +45,12 @@ namespace DefaultTheme
 
 		public bool IsAuthenticated(HttpContext ctrl)
 		{
+			Debug.WriteLine("IsAuthenticated");
 			if (ctrl != null)
 			{
+				Debug.WriteLine("ctrl != null");
+				Debug.WriteLine(GetToken(ctrl));
+				//return true;
 				return new User().IsTokenValid(GetToken(ctrl));
 			}
 			else
@@ -53,5 +58,7 @@ namespace DefaultTheme
 				return false;
 			}
 		}
+
+		public User GetUser(HttpContext context) => User.GetUserByToken(GetToken(context));
 	}
 }

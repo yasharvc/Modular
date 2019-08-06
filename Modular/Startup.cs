@@ -1,6 +1,8 @@
 using Contracts;
+using Contracts.Authentication;
 using Contracts.Exceptions.System;
 using Contracts.Hub;
+using Contracts.Models;
 using Contracts.Module;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.CookiePolicy;
@@ -25,6 +27,9 @@ namespace Modular
 	{
 		public static Manager.Manager Manager { get; } = new Manager.Manager();
 		private IHttpContextAccessor httpContextAccessor = null;
+
+		public event Delegates.UserInfoEventArg OnCurrentUserRequired;
+
 		public Startup(IConfiguration configuration)
 		{
 			Configuration = configuration;
@@ -113,13 +118,14 @@ namespace Modular
 
 				var auth = Manager.AuthenticationManager.GetAuthenticationByToken(x.Token);
 				auth.HttpContext = context;
+				context.Items[Consts.CONTEXT_ITEM_KEY_AUTH] = auth;
 
 				if (auth.IsAuthenticated())
 				{
-
 					res.ParseAdditionalParameters(routeData.GetQueryString(req.Path));
 					var actionResult = Executer.InvokeAction(res, routeData, context);
 					context.Response.StatusCode = 200;
+
 					if (actionResult is ActionResult)
 						await (actionResult as ActionResult).ExecuteResultAsync(actionContext);
 					else
@@ -187,6 +193,14 @@ namespace Modular
 		public string GetConnectionString() => httpContextAccessor.HttpContext.RequestServices.GetRequiredService<Configuration>().DataBaseConnectionString();
 
 		public IEnumerable<ModuleManifest> GetModuleList() => Manager.ModuleManager.GetModules().Select(m => m.Manifest);
+
+		public User GetCurrentUser(HttpContext ctx)
+		{
+			var auth = ctx.Items[Consts.CONTEXT_ITEM_KEY_AUTH] as Authentication;
+			if (auth == null)
+				return new User();
+			return auth.GetCurrentUser(ctx);
+		}
 
 
 		#endregion

@@ -50,14 +50,17 @@ namespace Contracts.Models
 
 		public bool IsTokenValid(string Token)
 		{
+			if (Token.Trim().Length == 0)
+				return false;
 			var query = "SELECT COUNT(1) FROM dbo.UserSession WHERE Token = @token AND EndSession > GETDATE()";
 			var connection = new DB().GetConnection(DB.DBKind.Permission);
 			var x = connection.ExecuteScalar<int>(query, new { token = Token });
 			return x > 0;
 		}
-
 		public static User GetUserByToken(string token)
 		{
+			if (string.IsNullOrEmpty(token))
+				return new User();
 			var query = "SELECT u.* FROM dbo.USERS u INNER JOIN dbo.UserSession s ON s.UserID=u.ID WHERE s.Token=@token";
 			var connection = new DB().GetConnection(DB.DBKind.Permission);
 			var users = connection.Query<User>(query, new { token });

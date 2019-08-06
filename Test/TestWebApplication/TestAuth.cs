@@ -1,4 +1,5 @@
 ﻿using Contracts.Authentication;
+using Contracts.Models;
 using Microsoft.AspNetCore.Http;
 using System;
 
@@ -26,6 +27,11 @@ namespace TestWebApplication
 				return true;
 			}
 			return false;
+		}
+
+		public override User GetCurrentUser(HttpContext ctx)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

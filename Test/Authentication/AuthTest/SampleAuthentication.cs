@@ -1,4 +1,6 @@
 ﻿using Contracts.Authentication;
+using Contracts.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace AuthTest
 {
@@ -9,5 +11,10 @@ namespace AuthTest
 		public override string LoginPagePath => "/SampleAuth/Index";
 
 		public override bool IsAuthenticated() => false;
+
+		public override User GetCurrentUser(HttpContext ctx)
+		{
+			throw new System.NotImplementedException();
+		}
 	}
 }

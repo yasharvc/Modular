@@ -14,8 +14,8 @@ namespace DefaultTheme.Controllers
 			{
 				HttpContext = HttpContext
 			};
-			if (!auth.IsAuthenticated())
-				return Redirect(new Authentication().LoginPagePath);
+			if (auth.IsAuthenticated())
+				return Redirect("/Home/Index");
 			return this.GetView();
 		}
 

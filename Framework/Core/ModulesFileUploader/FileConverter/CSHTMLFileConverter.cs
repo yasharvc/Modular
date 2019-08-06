@@ -15,8 +15,8 @@ namespace ModulesFileUploader.FileConverter
 			var regEx = new Regex(@"((?<=\@model\s)[^\r|^\n]+)");
 			var matches = regEx.Matches(content);
 			content = regEx.Replace(content, "dynamic");
-			regEx = new Regex(@"[(][\w.]+[)]");
-			content = regEx.Replace(content, "(dynamic)");
+			//regEx = new Regex(@"[(][\w.]+[)]");
+			//content = regEx.Replace(content, "(dynamic)");
 			return content;
 		}
 	}

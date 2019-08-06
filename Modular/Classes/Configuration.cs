@@ -11,9 +11,9 @@ namespace Modular.Classes
 		public string DataBaseConnectionString()
 		{
 			if (HttpContextAccessor.HttpContext.Items.ContainsKey(Consts.CONTEXT_ITEM_IS_IN_DEBUG))
-				return "OK";
+				return "Data Source=192.168.0.56;Initial Catalog=CMMS_WEB_DEBUG;User ID=sa;Password=@321@123#;";
 			else
-				return "CANCEL";
+				return "Data Source=192.168.0.56;Initial Catalog=CMMS_WEB;User ID=sa;Password=@321@123#;";
 		}
 	}
 }

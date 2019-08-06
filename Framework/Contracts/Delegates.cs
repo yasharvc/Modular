@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Contracts.Models;
 
 namespace Contracts
 {
 	public class Delegates
 	{
 		public delegate string StringToString(string input);
+		public delegate User UserInfoEventArg();
 	}
 }

@@ -1,0 +1,12 @@
+﻿@using Contracts.Razor
+@model IEnumerable<KeyValuePair<string, Dictionary<string, Contracts.ViewComponent.BaseViewComponent>>>
+
+@foreach (var item in Model)
+{
+	<ul>
+		@foreach (var keyval in item.Value)
+		{
+			@(await Component.Component((string)item.Key, (string)keyval.Key))
+		}
+	</ul>
+}

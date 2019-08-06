@@ -1,0 +1,156 @@
+﻿@{
+	Layout = null;
+}
+<!DOCTYPE html>
+
+<!--[if IE 8]> <html lang="en" class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9 no-js"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="fa" dir="rtl">
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+
+<head>
+	<meta charset="utf-8" />
+	<title>ورود به سامانه CMMS</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta content="width=device-width, initial-scale=1" name="viewport" />
+	<meta content="Preview page of Metronic Admin RTL Theme #2 for " name="description" />
+	<meta content="" name="author" />
+	<!-- BEGIN GLOBAL MANDATORY STYLES -->
+	<link href="~/assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+	<link href="~/assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css" />
+	<link href="~/assets/global/plugins/bootstrap/css/bootstrap-rtl.min.css" rel="stylesheet" type="text/css" />
+	<link href="~/assets/global/plugins/bootstrap-switch/css/bootstrap-switch-rtl.min.css" rel="stylesheet" type="text/css" />
+	<!-- END GLOBAL MANDATORY STYLES -->
+	<!-- BEGIN PAGE LEVEL PLUGINS -->
+	<link href="~/assets/global/plugins/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+	<link href="~/assets/global/plugins/select2/css/select2-bootstrap.min.css" rel="stylesheet" type="text/css" />
+	<!-- END PAG~LEVEL PLUGINS -->
+	<!-- BEGIN T~ME GLOBAL STYLES -->
+	<link href="~/assets/global/css/components-rtl.min.css" rel="stylesheet" id="style_components" type="text/css" />
+	<link href="~/assets/global/css/plugins-rtl.min.css" rel="stylesheet" type="text/css" />
+	<!-- END THEME GLOBAL STYLES -->
+	<!-- BEGIN PAGE LEVEL STYLES -->
+	<link href="~/assets/pages/css/login-rtl.min.css" rel="stylesheet" type="text/css" />
+	<link href="~/css/site.min.css" rel="stylesheet" type="text/css" />
+	<!-- END PAGE LEVEL STYLES -->
+	<!-- BEGIN THEME LAYOUT STYLES -->
+	<!-- END THEME LAYOUT STYLES -->
+	<link rel="shortcut icon" href="/favicon.ico" />
+	<style>
+		@@font-face {
+			font-family: sans;
+			src: url(../fonts/sans.ttf);
+		}
+	</style>
+</head>
+<!-- END HEAD -->
+
+<body class=" login">
+	<a href="/ModuleAdmin/Security/Login"><i class="fa fa-lock"></i></a>
+	<!-- BEGIN LOGO -->
+	<div class="logo">
+		<a href="index.html">
+			<img src="~/assets/pages/img/logo-big.png" style="width:350px;height:200px;" />
+		</a>
+	</div>
+	<!-- END LOGO -->
+	<!-- BEGIN LOGIN -->
+	<div class="content">
+		<!-- BEGIN LOGIN FORM -->
+		<div class="login-form">
+			<h3 class="form-title font-green">ورود	</h3>
+			<div class="alert alert-danger display-hide">
+				<button class="close" data-close="alert"></button>
+				<span> Enter any username and password. </span>
+			</div>
+			<div class="form-group">
+				<!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+				<label class="control-label visible-ie8 visible-ie9">Username</label>
+				<input class="form-control form-control-solid placeholder-no-fix" type="text" autocomplete="off" placeholder="نام کاربری..." name="username" id="username" />
+			</div>
+			<div class="form-group">
+				<label class="control-label visible-ie8 visible-ie9">Password</label>
+				<input class="form-control form-control-solid placeholder-no-fix" type="password" autocomplete="off" placeholder="رمز عبور...." name="password" id="password" onkeypress="return ifEnter(event)" />
+			</div>
+
+			<div class="login-options">
+				<div class="alert alert-danger" style="display:none;" id="errorCont">
+					<i class="fa fa-times"></i> <span id="error"></span>
+				</div>
+			</div>
+			<div class="create-account">
+				<p onclick="login()" style="cursor:pointer;">
+					<a href="javascript:;" class="uppercase">ورود</a> <i class="fa fa-spin fa-spinner font-default fa-2x" id="loading" style="display:none;"></i>
+				</p>
+			</div>
+		</div>
+		<script>
+
+			function ifEnter(e) {
+				if (e.keyCode == 13) {
+					login();
+					return false;
+				}
+			}
+
+			function login() {
+				var loading = $('#loading');
+				var error = $('#error');
+				var errorCont = $('#errorCont');
+				var u = $('#username').val();
+				var p = $('#password').val();
+				errorCont.fadeOut();
+				loading.fadeIn();
+				$.post({
+					url: '/Security/Login',
+					data: {
+						username: u,
+						password: p
+					},
+					success: function (data) {
+						if (data.result)
+							window.location = '/Home/Index';
+						else {
+							error.html(data.error);
+							errorCont.fadeIn();
+							loading.fadeOut();
+						}
+					}
+				});
+			}
+		</script>
+		<!-- END LOGIN FORM -->
+	</div>
+	<div class="copyright"> شرکت صنعتی داداش برادر </div>
+	<!--[if lt IE 9]>
+	<script src="../assets/global/plugins/respond.min.js"></script>
+	<script src="../assets/global/plugins/excanvas.min.js"></script>
+	<script src="../assets/global/plugins/ie8.fix.min.js"></script>
+	<![endif]-->
+	<!-- BEGIN CORE PLUGINS -->
+	<script src="~/assets/global/plugins/jquery.min.js" type="text/javascript"></script>
+	<script src="~/assets/global/plugins/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+	<script src="~/assets/global/plugins/js.cookie.min.js" type="text/javascript"></script>
+	<script src="~/assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+	<script src="~/assets/global/plugins/jquery.blockui.min.js" type="text/javascript"></script>
+	<script src="~/assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
+	<!-- END CORE~LUGINS -->
+	<!-- BEGIN PA~ LEVEL PLUGINS -->
+	<script src="~/assets/global/plugins/jquery-validation/js/jquery.validate.min.js" type="text/javascript"></script>
+	<script src="~/assets/global/plugins/jquery-validation/js/additional-methods.min.js" type="text/javascript"></script>
+	<script src="~/assets/global/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
+	<!-- END PAGE LEVEL PLUGINS -->
+	<!-- BEGIN THEME GLOBAL SCRIPTS -->
+	<script src="~/assets/global/scripts/app.min.js" type="text/javascript"></script>
+	<!-- END THEME GLOBAL SCRIPTS -->
+	<!-- BEGIN PAGE LEVEL SCRIPTS -->
+	<script src="~/assets/pages/scripts/login.min.js" type="text/javascript"></script>
+	<!-- END PAGE LEVEL SCRIPTS -->
+	<!-- BEGIN THEME LAYOUT SCRIPTS -->
+	<!-- END THEME LAYOUT SCRIPTS -->
+
+</body>
+
+</html>

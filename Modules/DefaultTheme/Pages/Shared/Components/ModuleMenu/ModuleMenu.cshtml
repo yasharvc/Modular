@@ -1,0 +1,40 @@
+﻿@model Contracts.MVC.SideMenuHandler
+<ul class="page-sidebar-menu  page-header-fixed page-sidebar-menu-hover-submenu " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
+	@foreach (var keyval in Model.MenuesByLegend)
+	{
+		@if (keyval.Key != Contracts.Module.Menu.MenuLegendName.Custom)
+		{
+			<li class="nav-item">
+				<a href="javascript:;" class="nav-link nav-toggle">
+					<i class="@Model.GetLegendIcon(keyval.Key)"></i>
+					<span class="title">@Model.GetLegendTitle(keyval.Key)</span>
+					<span class="arrow"></span>
+				</a>
+				<ul class="sub-menu">
+					@foreach (var moduleMenu in keyval.Value.Item1)
+					{
+						<li class="nav-item">
+							<a href="javascript:;" class="nav-link ">
+								<i class="@moduleMenu.Icon.ToLower()"></i> @moduleMenu.Title
+							</a><ul class="sub-menu">
+								@foreach (var menu in moduleMenu.SubMenus)
+								{
+									<li class="nav-item">
+										<a href="/@menu.Link.Controller/@menu.Link.Action" class="nav-link ">
+											<i class="@menu.Icon.ToLower()"></i> @menu.Title
+										</a>
+									</li>
+								}
+							</ul>
+						</li>
+
+					}
+				</ul>
+			</li>
+		}
+		else
+		{
+
+		}
+	}
+</ul>
