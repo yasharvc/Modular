@@ -45,7 +45,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModulesFileUploader", "Fram
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TempFolderManager", "Framework\Core\TempFolderManager\TempFolderManager.csproj", "{062FC249-24C6-49E4-B3F3-BC043416E0C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BSThemeWithAuthentication", "Test\BSThemeWithAuthentication\BSThemeWithAuthentication.csproj", "{20D45ABD-E632-483C-8F8C-A134D21E25B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BSThemeWithAuthentication", "Test\BSThemeWithAuthentication\BSThemeWithAuthentication.csproj", "{20D45ABD-E632-483C-8F8C-A134D21E25B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefaultTheme", "Modules\DefaultTheme\DefaultTheme.csproj", "{AA9CAAD4-430C-4B0A-A00A-818713CBAC52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -117,6 +119,10 @@ Global
 		{20D45ABD-E632-483C-8F8C-A134D21E25B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{20D45ABD-E632-483C-8F8C-A134D21E25B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{20D45ABD-E632-483C-8F8C-A134D21E25B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA9CAAD4-430C-4B0A-A00A-818713CBAC52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA9CAAD4-430C-4B0A-A00A-818713CBAC52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA9CAAD4-430C-4B0A-A00A-818713CBAC52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA9CAAD4-430C-4B0A-A00A-818713CBAC52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
