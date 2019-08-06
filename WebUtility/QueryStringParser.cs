@@ -1,4 +1,4 @@
-﻿using ModuloContracts.Data;
+﻿using CoreCommons;
 using System.Collections.Generic;
 
 namespace WebUtility

@@ -1,4 +1,8 @@
 ﻿using Contracts.Module;
+using Contracts.Security;
+using Microsoft.AspNetCore.Mvc;
+using RestSharp;
+using RestSharp.Authenticators;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,6 +58,45 @@ namespace Contracts.Hub
 				};
 			else
 				return InvocationHubProvider.GetModuleList().Where(m => m.Status == ModuleStatus.Enable);
+		}
+
+		public enum ServiceSource : int
+		{
+			Amval = 1,
+			Anbar = 2
+		}
+		static Dictionary<ServiceSource, TokenData> Tokens = new Dictionary<ServiceSource, TokenData>();
+		public static OkObjectResult GetToken(ServiceSource Service)
+		{
+			if (!Tokens.ContainsKey(Service))
+				Tokens[Service] = new TokenData { Token = AcequireToken(Service) };
+			if (DateTime.Now > Tokens[Service].ExpireTime)
+				Tokens[Service] = new TokenData { Token = AcequireToken(Service), ExpireTime = DateTime.Now.Add(new TimeSpan(0, 115, 0)) };
+			return Tokens[Service].Token;
+		}
+
+		private static OkObjectResult AcequireToken(ServiceSource service)
+		{
+			if (service == ServiceSource.Amval)
+			{
+				string username = "940007";
+				string password = "123";
+				RestClient client = new RestClient("http://192.168.0.16:1002");
+				IRestResponse<TokenString> token = GetToken(username, password, client, "/api/Login");
+				client.Authenticator = new JwtAuthenticator(token.Data.token);
+				return new TestCtrl().Ok(token.Data.token);
+			}
+			throw new Exception();
+		}
+		internal class TestCtrl : ControllerBase { }
+		private static IRestResponse<TokenString> GetToken(string username, string password, RestClient client, string ApiActionUrl)
+		{
+			var request = new RestRequest(ApiActionUrl, Method.POST);
+
+			request.AddJsonBody(new { username, password });
+
+			IRestResponse<TokenString> response = client.Execute<TokenString>(request);
+			return response;
 		}
 	}
 }

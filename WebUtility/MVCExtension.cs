@@ -1,10 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
-using ModuloContracts.Exceptions.SystemExceptions;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace WebUtility
 {
@@ -17,7 +12,7 @@ namespace WebUtility
 				return HttpMethod.Post;
 			if (method.Equals("get"))
 				return HttpMethod.Get;
-			throw new HttpMethodNotFoundException(request.Method);
+			throw new Contracts.Exceptions.System.HttpMethodNotFoundException(request.Method);
 		}
 	}
 }
