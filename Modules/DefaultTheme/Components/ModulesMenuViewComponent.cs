@@ -11,7 +11,7 @@ namespace DefaultTheme.Components
 		public override async Task<IViewComponentResult> InvokeAsync()
 		{
 			var modules = Contracts.Hub.InvocationHub.GetModules();
-			return await Task.FromResult(GetView("HomeArea", new SideMenuHandler(modules,HttpContext)));
+			return await Task.FromResult(GetView(nameof(DefaultTheme), new SideMenuHandler(modules,HttpContext)));
 		}
 	}
 }

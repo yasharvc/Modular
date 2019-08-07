@@ -57,7 +57,7 @@ namespace Contracts.Hub
 					new DummyManifest("Dummy3","Third dummy module","Description for third dummy module")
 				};
 			else
-				return InvocationHubProvider.GetModuleList().Where(m => m.Status == ModuleStatus.Enable);
+				return InvocationHubProvider.GetModuleList();//.Where(m => m.Status == ModuleStatus.Enable);
 		}
 
 		public enum ServiceSource : int

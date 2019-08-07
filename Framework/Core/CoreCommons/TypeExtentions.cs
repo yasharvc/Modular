@@ -51,7 +51,14 @@ namespace CoreCommons
 			}
 			else if (resType == typeof(Guid))
 			{
-				return new Guid(parameters.Single(m => m.Name.Equals(resType.Name, StringComparison.OrdinalIgnoreCase)).Value);
+				try
+				{
+					return new Guid(parameters.Single(m => m.Name.Equals(name, StringComparison.OrdinalIgnoreCase)).Value);
+				}
+				catch
+				{
+					return new Guid(parameters.Single(m => m.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase)).Value);
+				}
 			}
 			else if (resType.IsGenericType)
 			{
@@ -119,8 +126,15 @@ namespace CoreCommons
 			var props = resType.GetDeclaredProperties();
 			foreach (var prop in props)
 			{
-				var value = ConvertProperty(prop.PropertyType, parameters, prop.Name, assembly, name);
-				prop.SetValue(res, value);
+				try
+				{
+					var value = ConvertProperty(prop.PropertyType, parameters, prop.Name, assembly, name);
+					prop.SetValue(res, value);
+				}
+				catch
+				{
+					prop.SetValue(res, null);
+				}
 			}
 			return res;
 		}

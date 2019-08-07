@@ -32,6 +32,8 @@ namespace DefaultTheme
 
 		public override BaseViewComponent GetCustomViewComponent(string name)
 		{
+			if(name.Equals("ModuleMenu",System.StringComparison.OrdinalIgnoreCase))
+				return new Components.ModulesMenuViewComponent();
 			return null;
 		}
 

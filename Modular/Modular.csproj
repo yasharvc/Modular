@@ -27,6 +27,8 @@
     <ProjectReference Include="..\Framework\Core\ModulesFileUploader\ModulesFileUploader.csproj" />
     <ProjectReference Include="..\Framework\Core\RequestHandler\RequestHandler.csproj" />
     <ProjectReference Include="..\Framework\Core\TypeConverter\TypeConverter.csproj" />
+    <ProjectReference Include="..\Framework\Core\Utility\Utility.csproj" />
+    <ProjectReference Include="..\WebUtility\WebUtility.csproj" />
   </ItemGroup>
 
   <ItemGroup>

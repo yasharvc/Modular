@@ -34,5 +34,10 @@ namespace CoreCommons
 			}
 			return new byte[0];
 		}
+
+		public override string ToString()
+		{
+			return $"{Name}.{PropertyName}[{Index}] = {Value}";
+		}
 	}
 }

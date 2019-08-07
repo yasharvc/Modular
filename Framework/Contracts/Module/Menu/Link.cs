@@ -13,7 +13,8 @@ namespace Contracts.Module.Menu
 				var type = typeof(ControllerBase);
 				if (value.IsAssignableFrom(type) || value.IsInstanceOfType(type) || value.IsSubclassOf(type))
 					_controller = value;
-				throw new Exception("Is not controller type");
+				else
+					throw new Exception("Is not controller type");
 			}
 		}
 		public string Action { get; set; }

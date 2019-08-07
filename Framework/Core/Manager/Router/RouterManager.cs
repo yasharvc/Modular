@@ -107,7 +107,13 @@ namespace Manager.Router
 		{
 			if (!url.EndsWith('/'))
 				url += '/';
-			var res = Routes.Where(m => url.StartsWith(m.Path, StringComparison.OrdinalIgnoreCase) && m.AllowedMethods.Contains(requestInfo.Method)).OrderBy(m => m.Path.Length);
+			List<RouteInformation> res = new List<RouteInformation>();
+			foreach (var route in Routes)
+			{
+				if ($"{route.Path}/".StartsWith(url, StringComparison.OrdinalIgnoreCase) && route.AllowedMethods.Contains(requestInfo.Method))
+					res.Add(route);
+			}
+			//var res = Routes.Where(m => url.StartsWith(m.Path, StringComparison.OrdinalIgnoreCase) && m.AllowedMethods.Contains(requestInfo.Method)).OrderBy(m => m.Path.Length);
 			return res.Last();
 		}
 	}
