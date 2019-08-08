@@ -47,19 +47,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TempFolderManager", "Framew
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BSThemeWithAuthentication", "Test\BSThemeWithAuthentication\BSThemeWithAuthentication.csproj", "{20D45ABD-E632-483C-8F8C-A134D21E25B8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefaultTheme", "Modules\DefaultTheme\DefaultTheme.csproj", "{AA9CAAD4-430C-4B0A-A00A-818713CBAC52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DefaultTheme", "Modules\DefaultTheme\DefaultTheme.csproj", "{AA9CAAD4-430C-4B0A-A00A-818713CBAC52}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{F095F60E-7876-4A10-B72A-39822142FA85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WSDL", "Modules\WSDL\WSDL.csproj", "{2A38B273-8723-485A-B2AF-57606358F340}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WSDL", "Modules\WSDL\WSDL.csproj", "{2A38B273-8723-485A-B2AF-57606358F340}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utility", "Framework\Core\Utility\Utility.csproj", "{D6ACC5FD-3289-4914-96F2-FC99FA94F07B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Utility", "Framework\Core\Utility\Utility.csproj", "{D6ACC5FD-3289-4914-96F2-FC99FA94F07B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebUtility", "WebUtility\WebUtility.csproj", "{98CA5895-8ED6-42E6-B234-9D7D077DF46F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebUtility", "WebUtility\WebUtility.csproj", "{98CA5895-8ED6-42E6-B234-9D7D077DF46F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Module.MachineDefinition", "Modules\Module.MachineDefinition\Module.MachineDefinition.csproj", "{22D23C89-3977-43B5-BE1A-D6D40F287B56}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Module.MachineDefinition", "Modules\Module.MachineDefinition\Module.MachineDefinition.csproj", "{22D23C89-3977-43B5-BE1A-D6D40F287B56}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API.MachineWorkingInfo", "Modules\API.MachineWorkingInfo\API.MachineWorkingInfo.csproj", "{6300555A-668D-406E-AAEE-4349C1A5CFFC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "API.MachineWorkingInfo", "Modules\API.MachineWorkingInfo\API.MachineWorkingInfo.csproj", "{6300555A-668D-406E-AAEE-4349C1A5CFFC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Module.MachineWorkingRecord", "Modules\Module.MachineWorkingRecord\Module.MachineWorkingRecord.csproj", "{216F8A38-33D0-4CB9-9BD3-59466B30D19E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -155,6 +157,10 @@ Global
 		{6300555A-668D-406E-AAEE-4349C1A5CFFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6300555A-668D-406E-AAEE-4349C1A5CFFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6300555A-668D-406E-AAEE-4349C1A5CFFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{216F8A38-33D0-4CB9-9BD3-59466B30D19E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{216F8A38-33D0-4CB9-9BD3-59466B30D19E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{216F8A38-33D0-4CB9-9BD3-59466B30D19E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{216F8A38-33D0-4CB9-9BD3-59466B30D19E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -185,6 +191,7 @@ Global
 		{98CA5895-8ED6-42E6-B234-9D7D077DF46F} = {8636D716-F6F3-484E-AB1B-D39D2AF9B878}
 		{22D23C89-3977-43B5-BE1A-D6D40F287B56} = {F095F60E-7876-4A10-B72A-39822142FA85}
 		{6300555A-668D-406E-AAEE-4349C1A5CFFC} = {F095F60E-7876-4A10-B72A-39822142FA85}
+		{216F8A38-33D0-4CB9-9BD3-59466B30D19E} = {F095F60E-7876-4A10-B72A-39822142FA85}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4EE56F6E-B0D4-4E2A-8981-6425B1473EDC}

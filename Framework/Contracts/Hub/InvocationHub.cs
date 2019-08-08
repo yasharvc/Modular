@@ -1,6 +1,7 @@
 ﻿using Contracts.Module;
 using Contracts.Security;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using RestSharp;
 using RestSharp.Authenticators;
 using System;
@@ -97,6 +98,32 @@ namespace Contracts.Hub
 
 			IRestResponse<TokenString> response = client.Execute<TokenString>(request);
 			return response;
+		}
+
+		public static object ServiceInvoke(string ModuleName, string FullClassName, string ServiceName, Type ReturnType, params dynamic[] Parameters)
+		{
+			if (IsModuleInDebugMode())
+			{
+				var content = CreatePostContent(ModuleName, FullClassName, ServiceName, Parameters);
+				var json = HttpPost(BaseUri, CallFunctionPath, content);
+				return JsonConvert.DeserializeObject(json, ReturnType);
+			}
+			else
+			{
+				return InvocationHubProvider.InvokeServiceFunction(ModuleName, FullClassName, ServiceName, ReturnType, Parameters);
+			}
+		}
+
+		private static List<KeyValuePair<string, string>> CreatePostContent(string moduleName, string fullClassName, string serviceName, dynamic[] parameters)
+		{
+			var pairs = new List<KeyValuePair<string, string>>
+			{
+				new KeyValuePair<string, string>("ModuleName", moduleName),
+				new KeyValuePair<string, string>("FullClassName",fullClassName),
+				new KeyValuePair<string, string>("ServiceName",serviceName),
+				new KeyValuePair<string, string>("parameters",JsonConvert.SerializeObject(parameters))
+			};
+			return pairs;
 		}
 	}
 }

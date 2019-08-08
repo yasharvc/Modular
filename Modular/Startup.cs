@@ -35,7 +35,7 @@ namespace Modular
 		{
 			Configuration = configuration;
 		}
-
+		
 		public IConfiguration Configuration { get; }
 
 		public void ConfigureServices(IServiceCollection services)
@@ -200,6 +200,11 @@ namespace Modular
 			if (!(ctx.Items[Consts.CONTEXT_ITEM_KEY_AUTH] is Authentication auth))
 				return new User();
 			return auth.GetCurrentUser(ctx);
+		}
+
+		public object InvokeServiceFunction(string ModuleName, string FullClassName, string ServiceName, Type ReturnType, params dynamic[] Parameters)
+		{
+			return new TypeConverter.TypeChanger(ReturnType.Assembly).ChangeType(Manager.ModuleManager.CallModuleFunction(ModuleName, FullClassName, ServiceName, Parameters), ReturnType);
 		}
 
 
