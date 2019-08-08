@@ -50,5 +50,12 @@ namespace Manager.Module
 		public string GetModuleCode(string moduleName) => ModuleAssemblies[moduleName].Item2.ServiceMeta.ToString();
 
 		public ModuleMeta GetModuleMeta(string moduleName) => ModuleAssemblies[moduleName].Item2;
+
+		public object CallModuleFunction(string moduleName,string fullClassName,string functionName,params object[] parameters)
+		{
+			var moduleMeta = GetModuleMeta(moduleName);
+			var obj = moduleMeta.CreateObject(fullClassName);
+			return moduleMeta.InvokeMethod(obj, functionName, parameters);
+		}
 	}
 }

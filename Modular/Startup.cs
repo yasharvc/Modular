@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Modular.Classes;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -129,7 +130,7 @@ namespace Modular
 					if (actionResult is ActionResult)
 						await (actionResult as ActionResult).ExecuteResultAsync(actionContext);
 					else
-						await context.Response.WriteAsync(actionResult as string);
+						await context.Response.WriteAsync(JsonConvert.ToString(actionResult));
 				}
 				else
 				{
@@ -196,8 +197,7 @@ namespace Modular
 
 		public User GetCurrentUser(HttpContext ctx)
 		{
-			var auth = ctx.Items[Consts.CONTEXT_ITEM_KEY_AUTH] as Authentication;
-			if (auth == null)
+			if (!(ctx.Items[Consts.CONTEXT_ITEM_KEY_AUTH] is Authentication auth))
 				return new User();
 			return auth.GetCurrentUser(ctx);
 		}

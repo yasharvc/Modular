@@ -60,7 +60,7 @@ namespace Manager.Router
 			path = $"{prefix}/{routeActionName}";
 			try
 			{
-				prefix = path.Substring(0, path.IndexOf(type.Name.Replace("controller", "", StringComparison.OrdinalIgnoreCase)) - 1);
+				prefix = path.Substring(0, path.IndexOf(type.Name.Replace("controller", "", StringComparison.OrdinalIgnoreCase), StringComparison.OrdinalIgnoreCase) - 1);
 			}
 			catch
 			{
@@ -110,7 +110,7 @@ namespace Manager.Router
 			List<RouteInformation> res = new List<RouteInformation>();
 			foreach (var route in Routes)
 			{
-				if ($"{route.Path}/".StartsWith(url, StringComparison.OrdinalIgnoreCase) && route.AllowedMethods.Contains(requestInfo.Method))
+				if (url.StartsWith($"{route.Path}/", StringComparison.OrdinalIgnoreCase) && route.AllowedMethods.Contains(requestInfo.Method))
 					res.Add(route);
 			}
 			//var res = Routes.Where(m => url.StartsWith(m.Path, StringComparison.OrdinalIgnoreCase) && m.AllowedMethods.Contains(requestInfo.Method)).OrderBy(m => m.Path.Length);

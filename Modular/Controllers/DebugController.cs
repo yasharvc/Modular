@@ -1,5 +1,7 @@
 ﻿using Contracts;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Utility;
 
 namespace Modular.Controllers
 {
@@ -15,9 +17,17 @@ namespace Modular.Controllers
 
 		public string RunCode()
 		{
-			var meta = Startup.Manager.ModuleManager.GetModuleMeta("BTThemeWithAuth");
-			var obj = meta.CreateObject("BSThemeWithAuthentication.SimpleService");
-			return meta.InvokeMethod(obj, "GetName", "yashar") as string;
+			return CallFunction("MachineWorkingInfo", "API.MachineWorkingInfo.Controllers.ValuesController", "GetMachine","[19]");
+		}
+
+		public string CallFunction(string ModuleName, string FullClassName, string ServiceName, string parameters)
+		{
+			var manager = Startup.Manager;//HttpContext.RequestServices.GetService(typeof(Manager)) as Manager;
+			parameters = parameters.Replace("\\\"", "\"");
+			parameters = parameters.Replace("\\\\\"", "\\\"");
+			JsonHandler jsonHandler = new JsonHandler();
+			var pars = jsonHandler.GetElementsInsideArray(parameters);
+			return JsonConvert.SerializeObject(manager.ModuleManager.CallModuleFunction(ModuleName, FullClassName, ServiceName, pars.ToArray()));
 		}
 	}
 }

@@ -16,6 +16,8 @@ namespace ModulesFileUploader
 		public void Move(string TempPath)
 		{
 			FileInfo info = new FileInfo(Directory.GetFiles(TempPath, $"*.dll").Single());
+			if(!Directory.Exists(Path.Combine(Consts.MODULES_BASE_PATH, ModuleName)))
+				Directory.CreateDirectory(Path.Combine(Consts.MODULES_BASE_PATH, ModuleName));
 			File.Move(info.FullName, Path.Combine(Consts.MODULES_BASE_PATH, ModuleName, info.Name));
 		}
 	}
