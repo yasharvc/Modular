@@ -14,6 +14,12 @@ namespace Modular.Areas._ModulesAdministration.Controllers
     {
 		public IActionResult Index() => View();
 
+		public IActionResult Status()
+		{
+			var mdl = Startup.Manager.ModuleManager.GetModules().Select(m => m.Manifest).ToList();
+			return View(mdl);
+		}
+
 		[HttpGet]
 		public IActionResult NewToken() => View();
 
@@ -46,6 +52,12 @@ namespace Modular.Areas._ModulesAdministration.Controllers
 		{
 			var auth = Startup.Manager.AuthenticationManager.GetAuthenticationByToken(token);
 			return this.ToFileResult(auth.GetCode(), "Authentication.cs");
+		}
+
+		[HttpGet]
+		public ActionResult GetCode(string moduleName)
+		{
+			return this.ToFileResult(Startup.Manager.ModuleManager.GetModuleMeta(moduleName).ServiceMeta.ToString(), $"{moduleName}.cs");
 		}
 	}
 }

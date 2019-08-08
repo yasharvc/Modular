@@ -1,10 +1,36 @@
 ﻿@model IEnumerable<Contracts.Authentication.Authentication>
 @{
-    Layout = "_Layout";
+	Layout = "_Layout";
 }
-<ul>
-	@foreach (var item in Model)
-	{
-		<li>@item.GetDescription() <a href="~/_ModulesAdministration/Panel/GetAuthCode?token=@item.Token" class="btn btn-primary"><i class="fa fa-code"></i></a></li>
-	}
-</ul>
+<div class="section__content section__content--p30">
+	<div class="container-fluid">
+		<div class="table-responsive table--no-card m-b-30">
+			<table class="table table-borderless table-striped table-earning">
+				<thead>
+					<tr>
+						<th class="text-center">توضیح</th>
+						<th class="text-center">ابزارها</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var item in Model)
+					{
+						<tr>
+							<td class="text-center">@item.GetDescription()</td>
+							<td class="text-center">
+								<div class="btn-group btn-group-toggle" data-toggle="buttons">
+									<button class="btn btn-primary" type="button" onclick="getCode('@item.Token')"><i class="fa fa-file-code"></i> دریافت کد</button>
+								</div>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+		<script>
+			function getCode(token) {
+				window.open('GetAuthCode?token=' + token, '_blank');
+			}
+		</script>
+	</div>
+</div>

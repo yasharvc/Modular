@@ -40,6 +40,10 @@ Notes:	decreasing heading by 0.4em with every subsequent heading level
 /*                   GENERIC                           */
 /*-----------------------------------------------------*/
 /* ----- Normalize ----- */
+@font-face {
+	font-family: sans;
+	src: url('../../fonts/sans.ttf');
+}
 * {
     margin: 0;
     padding: 0;
@@ -99,7 +103,7 @@ p {
 
 /* ----- Typography ----- */
 body {
-    font-family: "Poppins", sans-serif;
+    font-family: 'sans',"Poppins", sans-serif;
     font-weight: 400;
     font-size: 16px;
     line-height: 1.625;
