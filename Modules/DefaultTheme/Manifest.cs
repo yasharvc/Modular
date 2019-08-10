@@ -3,19 +3,13 @@ using Contracts.Module;
 using Contracts.Module.Menu;
 using Contracts.ViewComponent;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace DefaultTheme
 {
 	public class Manifest : ModuleManifest, IThemeProvider
 	{
-		public Manifest()
-		{
-			Name = "DefaultTheme";
-			Description = "تم سازمانی شونیز";
-			Token = "MDL-F09EEAA2-AC78-4F9A-A4DD-BAF52DD98885";
-			Version = Assembly.GetExecutingAssembly().GetName().Version;
-		}
+		public Manifest() : base(nameof(DefaultTheme), "تم سازمانی شونیز", "MDL-F09EEAA2-AC78-4F9A-A4DD-BAF52DD98885")
+		{ }
 
 		public string LayoutPathInsideModule => "/Views/Shared/_Layout.cshtml";
 

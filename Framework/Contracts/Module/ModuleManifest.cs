@@ -2,11 +2,21 @@
 using Contracts.ViewComponent;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Contracts.Module
 {
 	public abstract class ModuleManifest
 	{
+		public ModuleManifest() { }
+		public ModuleManifest(string name,string description, string token,params Dependency[] deps)
+		{
+			Name = name;
+			Description = description;
+			Token = token;
+			Version = Assembly.GetExecutingAssembly().GetName().Version;
+			Dependencies.AddRange(deps);
+		}
 		public string Name { get; set; }
 		public string Description { get; set; }
 		public string Token { get; set; }

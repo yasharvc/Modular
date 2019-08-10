@@ -129,6 +129,8 @@ namespace Modular
 
 					if (actionResult is ActionResult)
 						await (actionResult as ActionResult).ExecuteResultAsync(actionContext);
+					else if (actionResult == null)
+						return;
 					else
 						await context.Response.WriteAsync(JsonConvert.ToString(actionResult));
 				}
@@ -204,7 +206,8 @@ namespace Modular
 
 		public object InvokeServiceFunction(string ModuleName, string FullClassName, string ServiceName, Type ReturnType, params dynamic[] Parameters)
 		{
-			return new TypeConverter.TypeChanger(ReturnType.Assembly).ChangeType(Manager.ModuleManager.CallModuleFunction(ModuleName, FullClassName, ServiceName, Parameters), ReturnType);
+			var res = Manager.ModuleManager.CallModuleFunction(ModuleName, FullClassName, ServiceName, Parameters);
+			return new TypeConverter.TypeChanger(ReturnType.Assembly).ChangeType(res, ReturnType);
 		}
 
 
