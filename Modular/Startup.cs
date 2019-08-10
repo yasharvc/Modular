@@ -207,7 +207,7 @@ namespace Modular
 		public object InvokeServiceFunction(string ModuleName, string FullClassName, string ServiceName, Type ReturnType, params dynamic[] Parameters)
 		{
 			var res = Manager.ModuleManager.CallModuleFunction(ModuleName, FullClassName, ServiceName, Parameters);
-			return new TypeConverter.TypeChanger(ReturnType.Assembly).ChangeType(res, ReturnType);
+			return new TypeConverter.TypeConverter(ReturnType.Assembly).Convert(res, ReturnType);
 		}
 
 

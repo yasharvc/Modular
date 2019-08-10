@@ -3,12 +3,21 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace TypeConverter
 {
 	public class TypeConverter
 	{
+		Assembly Assembly { get; set; }
+
+		public TypeConverter(Assembly assembly)
+		{
+			Assembly = assembly;
+		}
+		public TypeConverter() : this(null) { }
+
 		public object Convert(object input,Type destType)
 		{
 			var inputType = input.GetType();

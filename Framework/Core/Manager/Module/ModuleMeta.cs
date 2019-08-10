@@ -12,7 +12,7 @@ namespace Manager.Module
 {
 	public class ModuleMeta
 	{
-		protected TypeChanger TypeChanger { get; set; }
+		protected TypeConverter.TypeConverter TypeChanger { get; set; }
 		protected Assembly Assembly { get; set; }
 		public ServiceMeta ServiceMeta { get; protected set; }
 		public ModuleMeta(Assembly asm, ModuleManifest manifest)
@@ -24,7 +24,7 @@ namespace Manager.Module
 				ModuleName = manifest.Name,
 				VersionMajor = manifest.Version.Major
 			};
-			TypeChanger = new TypeChanger(Assembly);
+			TypeChanger = new TypeConverter.TypeConverter(Assembly);
 			ResolveServiceFunctions();
 			ResolveServiceModels();
 		}
@@ -71,7 +71,7 @@ namespace Manager.Module
 		{
 			object res = InvokeMethod(obj, MethodName, Parameters);
 			if (returnType != typeof(void))
-				return TypeChanger.ChangeType(res, returnType);
+				return TypeChanger.Convert(res, returnType);
 			return null;
 		}
 		public object InvokeMethod(object obj, string MethodName, params object[] Parameters)
@@ -81,7 +81,7 @@ namespace Manager.Module
 			var convertedParams = new object[parameters.Length];
 			for (int i = 0; i < parameters.Length; i++)
 			{
-				convertedParams[i] = TypeChanger.ChangeType(Parameters[i], parameters[i].ParameterType);
+				convertedParams[i] = TypeChanger.Convert(Parameters[i], parameters[i].ParameterType);
 			}
 			try
 			{
@@ -113,7 +113,7 @@ namespace Manager.Module
 					}
 					else
 					{
-						convertedParams[i] = TypeChanger.ChangeType(Parameters[i], methodParameters[i].ParameterType);
+						convertedParams[i] = TypeChanger.Convert(Parameters[i], methodParameters[i].ParameterType);
 					}
 				}
 			}
