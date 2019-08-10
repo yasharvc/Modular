@@ -20,6 +20,8 @@ namespace TypeConverter
 
 		public object Convert(object input,Type destType)
 		{
+			if (input == null)
+				return null;
 			var inputType = input.GetType();
 			if (destType.IsPrimitiveType())
 			{
