@@ -4,18 +4,6 @@ using System.Collections.Generic;
 
 namespace TypeConverter.Tests
 {
-	internal class TestClass
-	{
-		public int Age { get; set; }
-		public List<string> Courses { get; set; }
-		public string FirstName { get; set; }
-	}
-
-	internal class TestGenericClass<T>
-	{
-		public T Data { get; set; }
-	}
-
 	[TestClass]
 	public class TypeConverterTests
 	{
@@ -224,5 +212,65 @@ namespace TypeConverter.Tests
 			Assert.AreEqual(false, converter.IsDictionary(typeof(TestGenericClass<>)));
 		}
 		/////////////////////////////////////////////
+
+		/////////////////////////////////////////////
+		[TestMethod]
+		public void IsTuple_List()
+		{
+			var list = new List<string>();
+
+			TypeConverter converter = new TypeConverter();
+
+			Assert.AreEqual(false, converter.IsTuple(list.GetType()));
+		}
+
+		[TestMethod]
+		public void IsTuple_IList()
+		{
+			TypeConverter converter = new TypeConverter();
+
+			Assert.AreEqual(false, converter.IsTuple(typeof(IList<>)));
+		}
+
+		[TestMethod]
+		public void IsTuple_Tuple_2_Item()
+		{
+			TypeConverter converter = new TypeConverter();
+
+			Assert.AreEqual(true, converter.IsTuple(typeof(Tuple<int, string>)));
+		}
+
+		[TestMethod]
+		public void IsTuple_Tuple_1_Item()
+		{
+			TypeConverter converter = new TypeConverter();
+
+			Assert.AreEqual(true, converter.IsTuple(typeof(Tuple<int>)));
+		}
+
+		[TestMethod]
+		public void IsTuple_Dictionary()
+		{
+			TypeConverter converter = new TypeConverter();
+
+			Assert.AreEqual(false, converter.IsTuple(typeof(Dictionary<,>)));
+		}
+
+		[TestMethod]
+		public void IsTuple_Class()
+		{
+			TypeConverter converter = new TypeConverter();
+
+			Assert.AreEqual(false, converter.IsTuple(typeof(TestClass)));
+		}
+
+		[TestMethod]
+		public void IsTuple_GenericClass()
+		{
+			TypeConverter converter = new TypeConverter();
+			Assert.AreEqual(false, converter.IsTuple(typeof(TestGenericClass<>)));
+		}
+		/////////////////////////////////////////////
+
 	}
 }
