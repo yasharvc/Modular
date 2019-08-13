@@ -11,7 +11,7 @@ namespace Contracts
 {
 	public class RouteInformation
 	{
-		public string Prefix { get; set; }
+		public string Prefix { get; set; } = "";
 		public string Path { get; set; }
 		public List<HttpMethod> AllowedMethods { get; set; } = new List<HttpMethod>();
 		public Type Controller { get; set; }
@@ -21,8 +21,8 @@ namespace Contracts
 
 		public string ModuleName { get; set; }
 
-		public string GetControllerName() => Controller.Name.Replace("controller","",StringComparison.OrdinalIgnoreCase);// Path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries)[0];
-		public string GetActionName() => RouteActionName;// Path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries)[1];
+		public string GetControllerName() => Controller != null ? Controller.Name.Replace("controller","",StringComparison.OrdinalIgnoreCase) : Path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries)[0];
+		public string GetActionName() => !string.IsNullOrEmpty(RouteActionName) ?  RouteActionName : Path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries)[1];
 
 		public string GetQueryString(string url)
 		{
@@ -37,7 +37,7 @@ namespace Contracts
 			{
 				fixedURL = $"{fixedURL}/";
 			}
-			string path = $"{(Prefix.Length > 0 ? Prefix + (Prefix.EndsWith("/") ? "" : "/") : "/")}{GetControllerName()}/{GetActionName()}/";
+			string path = $"{(!string.IsNullOrEmpty(Prefix) ? Prefix + (Prefix.EndsWith("/") ? "" : "/") : "/")}{GetControllerName()}/{GetActionName()}/";
 			if (fixedURL.StartsWith(path, StringComparison.OrdinalIgnoreCase))
 			{
 				return url.Substring(path.Length - (!haveFirstSlash ? 1 : 0) - (!haveLastSlash ? 1 : 0));
