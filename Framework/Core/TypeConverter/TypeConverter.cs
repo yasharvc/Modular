@@ -2,7 +2,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -23,7 +25,9 @@ namespace TypeConverter
 			if (input == null)
 				return null;
 			var inputType = input.GetType();
-			if (destType.IsPrimitiveType())
+			if(destType.IsNullable())
+				return (CreateObjectByType(destType) as NullableConverter).ConvertFrom(input);
+			else if (destType.IsPrimitiveType())
 			{
 				if (destType == typeof(string))
 					return input;
@@ -32,10 +36,23 @@ namespace TypeConverter
 			}
 			else if (destType == typeof(Guid))
 				return new Guid(input.ToString());
+			else if (destType == typeof(TimeSpan))
+				return ToTimeStamp(input);
 			else if (IsGeneric(destType))
 				return ConvertGenericType(input, destType);
 			else //This is class
 				return ConvertClass(input, destType);
+		}
+
+		private object ToTimeStamp(object input)
+		{
+			var str = input.ToString();
+			if (str.Contains(':'))
+			{
+				var parts = str.Split(':');
+				return new TimeSpan(int.Parse(parts[0]), int.Parse(parts[1]), int.Parse(parts[2]));
+			}
+			throw new NotImplementedException();
 		}
 
 		private object ConvertClass(object input, Type destType)
@@ -43,6 +60,10 @@ namespace TypeConverter
 			object res = CreateObjectByType(destType);
 			var toProps = destType.GetProperties();
 			var fromType = input.GetType();
+			//if(destType == typeof(TimeSpan))
+			//{
+			//	return Convert
+			//}
 			foreach (var prop in toProps)
 			{
 				var inputPropertyValue = fromType.GetProperty(prop.Name).GetValue(input);
@@ -156,7 +177,11 @@ namespace TypeConverter
 			);
 		public object CreateObjectByType(Type type)
 		{
-			if (type.IsPrimitiveType())
+			if (type.IsNullable())
+			{
+				return new NullableConverter(type);
+			}
+			else if (type.IsPrimitiveType())
 			{
 				if (type == typeof(string))
 					return "";

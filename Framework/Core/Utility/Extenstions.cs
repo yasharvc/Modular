@@ -59,6 +59,7 @@ namespace Utility
 				throw new NotImplementedException();
 			}
 		}
+		
 
 		public static string GetSimpleClassName(this string p)
 		{
@@ -67,5 +68,7 @@ namespace Utility
 		}
 
 		public static bool IsListType(this Type type) => type.IsGenericType && type.FullName.Contains("System.Collections.Generic.List");
+
+
 	}
 }

@@ -168,6 +168,18 @@ namespace CoreCommons
 			}
 		}
 
+		public static bool IsNullable(this Type t)
+		{
+			try
+			{
+				return !t.IsPrimitiveType() && t.IsGenericType && Nullable.GetUnderlyingType(t) != null;
+			}
+			catch
+			{
+				return false;
+			}
+		}
+
 		//private static object GetPrimitivePropertyValue<FROM>(FROM input, PropertyInfo propInfo)
 		//{
 		//	var inpType = input.GetType();
