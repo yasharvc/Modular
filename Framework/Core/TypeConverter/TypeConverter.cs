@@ -154,7 +154,7 @@ namespace TypeConverter
 			|| (type.GetGenericTypeDefinition() == typeof(Tuple<,,,,>))
 			|| (type.GetGenericTypeDefinition() == typeof(Tuple<,,,,,>))
 			);
-		private object CreateObjectByType(Type type)
+		public object CreateObjectByType(Type type)
 		{
 			if (type.IsPrimitiveType())
 			{

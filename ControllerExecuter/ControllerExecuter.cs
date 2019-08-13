@@ -56,8 +56,33 @@ namespace ControllerExecuter
 
 		private MethodInfo GetMethod(RouteInformation routeData, RequestInformation requestInformation) => routeData.Controller.GetMethods().Single(m => m.Name.Equals(routeData.MethodName, StringComparison.OrdinalIgnoreCase) && m.CheckMethod(requestInformation.Method));
 
-		private object GetComplexParameter(ParameterInfo parameter, List<RequestParameter> tempParameters) =>
-			parameter.CastToType(tempParameters);
+		private object GetComplexParameter(ParameterInfo parameter, List<RequestParameter> tempParameters)
+		{
+			if(new TypeConverter.TypeConverter().IsList(parameter.ParameterType))
+			{
+				var converter = new TypeConverter.TypeConverter();
+				var IListRef = typeof(IList<>);
+				Type[] IListParam = { parameter.ParameterType.GetGenericArguments()[0] };
+				object res = converter.CreateObjectByType(parameter.ParameterType);
+				
+				var props = parameter.ParameterType.GetGenericArguments()[0].GetProperties();
+				var indices = tempParameters.Select(m => int.Parse(m.Index)).Distinct();
+				foreach (var index in indices)
+				{
+					var parameters = tempParameters.Where(m => m.Name == parameter.Name && m.Index == index.ToString()).Select(m => new { m.PropertyName, m.Value });
+					var obj = Activator.CreateInstance(parameter.ParameterType.GetGenericArguments()[0]);
+					foreach (var prop in props)
+					{
+						var value = parameters.FirstOrDefault(m => m.PropertyName.Equals(prop.Name, StringComparison.OrdinalIgnoreCase));
+						prop.SetValue(obj, converter.Convert(value?.Value,prop.PropertyType) );
+					}
+					res.GetType().GetMethod("Add").Invoke(res, new object[] { obj });
+				}
+				return res;
+			}
+			else
+				return parameter.CastToType(tempParameters);
+		}
 
 		private void GetPrimitiveParameter(List<RequestParameter> tempParameters, SortedDictionary<string, object> sortedParameter, int i, ParameterInfo parameter)
 		{
