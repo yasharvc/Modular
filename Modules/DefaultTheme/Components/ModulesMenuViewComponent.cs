@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
+﻿using Contracts.MVC;
 using Contracts.ViewComponent;
-using Contracts.MVC;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace DefaultTheme.Components
 {
