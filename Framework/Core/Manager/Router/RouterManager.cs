@@ -14,7 +14,7 @@ namespace Manager.Router
 	{
 		protected ControllerExecuter.ControllerExecuter ControllerExecuter { get; set; } = new ControllerExecuter.ControllerExecuter();
 		protected List<RouteInformation> Routes { get; } = new List<RouteInformation>();
-		protected Dictionary<string,Dictionary<string, string>> Redirections { get; } = new Dictionary<string,Dictionary<string, string>>();
+		protected Dictionary<string, Dictionary<string, string>> Redirections { get; } = new Dictionary<string, Dictionary<string, string>>();
 
 		public void ResolveRouteInformation(Assembly assembly)
 		{
@@ -28,7 +28,7 @@ namespace Manager.Router
 
 		private void AddRedirections(ModuleManifest moduleManifest) => Redirections[moduleManifest.Token] = moduleManifest.Redirections;
 
-		public void AddRedirection(string moduleToken,string from, string to) => Redirections[moduleToken][from] = to;
+		public void AddRedirection(string moduleToken, string from, string to) => Redirections[moduleToken][from] = to;
 
 		protected void ResolveRoutes(Assembly assembly, ModuleManifest moduleManifest)
 		{
@@ -56,12 +56,12 @@ namespace Manager.Router
 			var prefix = $"/{type.Name.Replace("Controller", "", StringComparison.OrdinalIgnoreCase)}";
 			var path = "";
 			var routeActionName = method.Name;
-			if(ctrlRouteAttr != null)
+			if (ctrlRouteAttr != null)
 			{
-				prefix = $"/{CompileTemplate(ctrlRouteAttr.Template,type)}";
+				prefix = $"/{CompileTemplate(ctrlRouteAttr.Template, type)}";
 			}
 			var methodRouteAttr = method.GetCustomAttribute<RouteAttribute>();
-			if(methodRouteAttr != null)
+			if (methodRouteAttr != null)
 				routeActionName = CompileTemplate(methodRouteAttr.Template, type);
 			path = $"{prefix}/{routeActionName}";
 			try
@@ -120,11 +120,12 @@ namespace Manager.Router
 					res.Add(route);
 			}
 			//var res = Routes.Where(m => url.StartsWith(m.Path, StringComparison.OrdinalIgnoreCase) && m.AllowedMethods.Contains(requestInfo.Method)).OrderBy(m => m.Path.Length);
-			if (res.Count == 0) {
+			if (res.Count == 0)
+			{
 				var dict = Redirections.Values;
 				foreach (var item in dict)
 				{
-					foreach (KeyValuePair<string,string> keyValue in item)
+					foreach (KeyValuePair<string, string> keyValue in item)
 					{
 						if (keyValue.Key.Equals(url, StringComparison.OrdinalIgnoreCase))
 						{
