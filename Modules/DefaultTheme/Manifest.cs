@@ -9,7 +9,10 @@ namespace DefaultTheme
 	public class Manifest : ModuleManifest, IThemeProvider
 	{
 		public Manifest() : base(nameof(DefaultTheme), "تم سازمانی شونیز", "MDL-F09EEAA2-AC78-4F9A-A4DD-BAF52DD98885")
-		{ }
+		{
+			Redirections.Add("/", "/Home/Index");
+			Redirections.Add("", "/Home/Index");
+		}
 
 		public string LayoutPathInsideModule => "/Views/Shared/_Layout.cshtml";
 

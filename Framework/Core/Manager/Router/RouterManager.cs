@@ -14,6 +14,7 @@ namespace Manager.Router
 	{
 		protected ControllerExecuter.ControllerExecuter ControllerExecuter { get; set; } = new ControllerExecuter.ControllerExecuter();
 		protected List<RouteInformation> Routes { get; } = new List<RouteInformation>();
+		protected Dictionary<string,Dictionary<string, string>> Redirections { get; } = new Dictionary<string,Dictionary<string, string>>();
 
 		public void ResolveRouteInformation(Assembly assembly)
 		{
@@ -22,7 +23,12 @@ namespace Manager.Router
 			var moduleName = resolver.GetModuleManifest().Name;
 			Routes.RemoveAll(m => m.ModuleName.Equals(moduleName, StringComparison.OrdinalIgnoreCase));
 			ResolveRoutes(assembly, resolver.GetModuleManifest());
+			AddRedirections(resolver.GetModuleManifest());
 		}
+
+		private void AddRedirections(ModuleManifest moduleManifest) => Redirections[moduleManifest.Token] = moduleManifest.Redirections;
+
+		public void AddRedirection(string moduleToken,string from, string to) => Redirections[moduleToken][from] = to;
 
 		protected void ResolveRoutes(Assembly assembly, ModuleManifest moduleManifest)
 		{
@@ -114,6 +120,19 @@ namespace Manager.Router
 					res.Add(route);
 			}
 			//var res = Routes.Where(m => url.StartsWith(m.Path, StringComparison.OrdinalIgnoreCase) && m.AllowedMethods.Contains(requestInfo.Method)).OrderBy(m => m.Path.Length);
+			if (res.Count == 0) {
+				var dict = Redirections.Values;
+				foreach (var item in dict)
+				{
+					foreach (KeyValuePair<string,string> keyValue in item)
+					{
+						if (keyValue.Key.Equals(url, StringComparison.OrdinalIgnoreCase))
+						{
+							return GetRouteFor(keyValue.Value, requestInfo);
+						}
+					}
+				}
+			}
 			return res.Last();
 		}
 	}

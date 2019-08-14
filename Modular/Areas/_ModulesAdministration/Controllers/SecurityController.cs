@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Modular.Classes;
 
 namespace Modular.Areas._ModulesAdministration.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+	[Area("_ModulesAdministration")]
     public class SecurityController : Controller
     {
 		AdminAuthentication perm = new AdminAuthentication();

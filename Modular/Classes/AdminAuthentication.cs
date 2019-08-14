@@ -6,38 +6,17 @@ namespace Modular.Classes
 {
 	public class AdminAuthentication : Contracts.Authentication.ModuleAdministrationAuthentication
 	{
+		AdminUserAuthentication auth = new AdminUserAuthentication();
 		public override string LoginPagePath => "/_ModulesAdministration/Security/Login";
 
-		public override User GetCurrentUser(HttpContext ctx)
-		{
-			throw new NotImplementedException();
-		}
+		public override User GetCurrentUser(HttpContext ctx) => auth.GetUser(HttpContext);
 
-		public override bool IsAuthenticated()
-		{
-			throw new NotImplementedException();
-		}
+		public override bool IsAuthenticated() => auth.IsAuthenticated(HttpContext);
 
-		internal void Extend()
-		{
-			throw new NotImplementedException();
-		}
+		internal bool Extend() => auth.ExtendTokenTime(HttpContext);
 
-		internal bool Authenticate(string userName, string password)
-		{
-			var auth = new Authentication();
-			var token = auth.Authenticate(userName, password, UserType.SiteManager);
-			if (!string.IsNullOrEmpty(token))
-			{
-				Authenticate(ctrl, token);
-				return true;
-			}
-			return false;
-		}
+		internal bool Authenticate(string userName, string password) => auth.Authenticate(HttpContext, userName, password);
 
-		internal void Disprove()
-		{
-			throw new NotImplementedException();
-		}
+		internal void Disprove() => auth.Disprove(HttpContext);
 	}
 }

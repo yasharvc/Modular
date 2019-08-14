@@ -1,5 +1,5 @@
 ﻿using Contracts.Models;
-using System;
+using System.Collections.Generic;
 
 namespace Contracts
 {
@@ -7,5 +7,6 @@ namespace Contracts
 	{
 		public delegate string StringToString(string input);
 		public delegate User UserInfoEventArg();
+		public delegate Dictionary<string, string> StringToStringDictionarryArgs();
 	}
 }

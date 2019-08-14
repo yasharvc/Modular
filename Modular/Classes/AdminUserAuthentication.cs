@@ -2,6 +2,6 @@
 {
 	public class AdminUserAuthentication : Contracts.Authentication.CookieBasedUserAuthentication
 	{
-		public AdminUserAuthentication() : base("_MA_USER_TOKEN_", Contracts.Models.UserType.Administrator) { }
+		public AdminUserAuthentication() : base("_MA_USER_TOKEN_", Contracts.Models.UserType.SiteManager) { }
 	}
 }

@@ -6,6 +6,7 @@ namespace Contracts.Authentication
 {
 	public abstract class CookieBasedUserAuthentication
 	{
+		private readonly int ExtendTimeInMinute = 10;
 		private UserType UserType { get; set; } = UserType.SiteUser;
 
 		private string HomeAreaUserToken { get; set; }
@@ -67,5 +68,7 @@ namespace Contracts.Authentication
 		}
 
 		public User GetUser(HttpContext context) => User.GetUserByToken(GetToken(context));
+
+		public bool ExtendTokenTime(HttpContext ctx) => new User().ExtendTokenTime(GetToken(ctx), ExtendTimeInMinute);
 	}
 }

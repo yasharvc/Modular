@@ -29,5 +29,7 @@ namespace Contracts.Module
 		public virtual IEnumerable<IMenu> AdminMenu { get; } = new List<IMenu>();
 		public ModuleStatus Status { get; set; } = ModuleStatus.Disable;
 		public bool IsSystemModule { get; set; } = false;
+		public virtual Dictionary<string, string> Redirections { get; } = new Dictionary<string, string>();
+
 	}
 }
