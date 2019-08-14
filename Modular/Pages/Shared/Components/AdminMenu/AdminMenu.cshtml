@@ -1,4 +1,6 @@
-﻿<li class="has-sub">
+﻿@model IEnumerable<Contracts.Module.ModuleManifest>
+
+<li class="has-sub">
 	<a class="js-arrow" href="#">
 		<i class="fas fa-plug"></i>ماژول ها
 		<span class="arrow">
@@ -19,22 +21,66 @@
 	</ul>
 </li>
 <li class="has-sub">
-<a class="js-arrow" href="#">
-	<i class="fas fa-user-secret"></i>سطح دسترسی
-	<span class="arrow">
-		<i class="fas fa-angle-down"></i>
-	</span>
-</a>
-<ul class="list-unstyled navbar__sub-list js-sub-list">
-	<li>
-		<a href="/_ModulesAdministration/Panel/NewToken">
-			<i class="fas fa-key"></i>دریافت کلید جدید
-		</a>
-	</li>
-	<li>
-		<a href="/_ModulesAdministration/Panel/AllAuths">
-			<i class="fas fa-chevron-down"></i>کلیدهای نصب شده
-		</a>
-	</li>
-</ul>
+	<a class="js-arrow" href="#">
+		<i class="fas fa-user-secret"></i>سطح دسترسی
+		<span class="arrow">
+			<i class="fas fa-angle-down"></i>
+		</span>
+	</a>
+	<ul class="list-unstyled navbar__sub-list js-sub-list">
+		<li>
+			<a href="/_ModulesAdministration/Panel/NewToken">
+				<i class="fas fa-key"></i>دریافت کلید جدید
+			</a>
+		</li>
+		<li>
+			<a href="/_ModulesAdministration/Panel/AllAuths">
+				<i class="fas fa-chevron-down"></i>کلیدهای نصب شده
+			</a>
+		</li>
+	</ul>
 </li>
+@foreach (var module in Model)
+{
+	if (module.AdminMenu.Count() > 0)
+	{
+		<li class="has-sub">
+			<a class="js-arrow" href="#">
+				<i class="fas fa-puzzle-piece"></i>@module.Description
+				<span class="arrow">
+					<i class="fas fa-angle-down"></i>
+				</span>
+			</a>
+			<ul class="list-unstyled navbar__sub-list js-sub-list">
+				@foreach (var menu in module.AdminMenu)
+				{
+					@if (menu.SubMenus.Count > 0)
+					{
+						@foreach (var submenu in menu.SubMenus)
+						{
+							@if (submenu.SubMenus.Count > 0)
+							{
+								@foreach (var ssubmenu in submenu.SubMenus)
+								{
+									<li><a href="@ssubmenu.Link"><i class="@Html.Raw(ssubmenu.Icon)"></i>@Html.Raw(ssubmenu.Title)</a></li>
+								}
+							}
+							else
+							{
+								<li><a href="@submenu.Link"><i class="@Html.Raw(submenu.Icon)"></i>@Html.Raw(submenu.Title)</a></li>
+							}
+						}
+					}
+					else
+					{
+						<li>
+							<a href="/ModuleAdmin/@menu.Link.ToString()">
+								<i class="@Html.Raw(menu.Icon)"></i>@Html.Raw(menu.Title)
+							</a>
+						</li>
+					}
+				}
+			</ul>
+		</li>
+	}
+}

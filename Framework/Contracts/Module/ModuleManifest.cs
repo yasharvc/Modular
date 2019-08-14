@@ -26,6 +26,7 @@ namespace Contracts.Module
 		public abstract Dictionary<string, BaseViewComponent> ViewComponents { get; }
 		public abstract BaseViewComponent GetCustomViewComponent(string name);
 		public virtual IEnumerable<IMenu> Menus { get; } = new List<IMenu>();
+		public virtual IEnumerable<IMenu> AdminMenu { get; } = new List<IMenu>();
 		public ModuleStatus Status { get; set; } = ModuleStatus.Disable;
 		public bool IsSystemModule { get; set; } = false;
 	}

@@ -95,6 +95,12 @@ namespace Modular
 			});
 			httpContextAccessor = accessor;
 			SetupInvocationHubHandling();
+			AddAdditionalDataIntoManager();
+		}
+
+		private void AddAdditionalDataIntoManager()
+		{
+			Manager.AuthenticationManager.ModuleAdministration = new AdminAuthentication();
 		}
 
 		private void SetupInvocationHubHandling()

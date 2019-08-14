@@ -19,5 +19,10 @@ namespace Contracts.Module.Menu
 		}
 		public string Action { get; set; }
 		public string ControllerName => Controller.Name.Replace("controller", "", StringComparison.OrdinalIgnoreCase);
+
+		public override string ToString()
+		{
+			return $"{ControllerName}/{Action}";
+		}
 	}
 }
