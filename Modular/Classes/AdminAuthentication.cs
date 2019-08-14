@@ -17,5 +17,27 @@ namespace Modular.Classes
 		{
 			throw new NotImplementedException();
 		}
+
+		internal void Extend()
+		{
+			throw new NotImplementedException();
+		}
+
+		internal bool Authenticate(string userName, string password)
+		{
+			var auth = new Authentication();
+			var token = auth.Authenticate(userName, password, UserType.SiteManager);
+			if (!string.IsNullOrEmpty(token))
+			{
+				Authenticate(ctrl, token);
+				return true;
+			}
+			return false;
+		}
+
+		internal void Disprove()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

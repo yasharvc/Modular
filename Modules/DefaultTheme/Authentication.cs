@@ -1,5 +1,4 @@
-﻿using Contracts.Authentication;
-using Contracts.Models;
+﻿using Contracts.Models;
 using Microsoft.AspNetCore.Http;
 
 namespace DefaultTheme

@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Contracts.Controller;
+﻿using Contracts.Controller;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Modular.Classes;
+using System.Linq;
 
 namespace Modular.Areas._ModulesAdministration.Controllers
 {
 	[Area("_ModulesAdministration")]
+	[UserInfo]
 	public class PanelController : Controller
     {
 		public IActionResult Index() => View();
