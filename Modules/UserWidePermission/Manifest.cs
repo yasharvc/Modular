@@ -17,7 +17,8 @@ namespace UserWidePermission
 		{
 			get
 			{
-				return null;
+				PrepareAdminPanel();
+				return adminPanel;
 			}
 		}
 

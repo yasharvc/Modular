@@ -37,6 +37,7 @@
     <Folder Include="Areas\_ModulesAdministration\Models\" />
     <Folder Include="Views\" />
     <Folder Include="Pages\" />
+    <Folder Include="__\Temp\" />
   </ItemGroup>
 
   <ItemGroup>

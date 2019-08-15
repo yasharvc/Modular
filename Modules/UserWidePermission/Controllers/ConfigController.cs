@@ -1,14 +1,13 @@
 ﻿using Contracts.Authentication;
 using Contracts.Controller;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using System.Collections.Generic;
 using UserWidePermission.Services.Models;
 using UserWidePermission.ViewModels;
 
 namespace UserWidePermission.Controllers
 {
-	[AuthenticationType(typeof(ModuleAdministrationAuthentication))]
+	[AuthenticationType(typeof(AdminAuthentication))]
 	public class ConfigController : Controller
 	{
 		[HttpGet]

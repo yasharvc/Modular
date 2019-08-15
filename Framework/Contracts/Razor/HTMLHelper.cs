@@ -16,6 +16,15 @@ namespace Contracts.Razor
 			return context.Items[Consts.CONTEXT_ITEM_KEY_THEME_LAYOUT_PATH].ToString();
 		}
 
+		public static string GetAdminLayout(this IHtmlHelper helper)
+		{
+			var context = helper.ViewContext.HttpContext;
+			if (InvocationHub.IsModuleInDebugMode() || !context.Items.ContainsKey(Consts.CONTEXT_ITEM_KEY_ADMIN_THEME_LAYOUT_PATH))
+				return "_Layout";
+			helper.ViewData["User"] = InvocationHub.GetCurrentUser();
+			return context.Items[Consts.CONTEXT_ITEM_KEY_ADMIN_THEME_LAYOUT_PATH].ToString();
+		}
+
 		public static async Task<IHtmlContent> Component(this IViewComponentHelper viewComponentHelper, string moduleName, string viewComponentName)
 		{
 			if (InvocationHub.IsModuleInDebugMode())

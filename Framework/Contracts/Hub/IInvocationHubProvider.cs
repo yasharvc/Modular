@@ -11,7 +11,7 @@ namespace Contracts.Hub
 		string GetConnectionString();
 		IEnumerable<ModuleManifest> GetModuleList();
 		IEnumerable<User> GetUsers();
-		User GetCurrentUser(HttpContext ctx);
+		User GetCurrentUser();
 		object InvokeServiceFunction(string ModuleName, string FullClassName, string ServiceName, Type ReturnType, params dynamic[] Parameters);
 	}
 }

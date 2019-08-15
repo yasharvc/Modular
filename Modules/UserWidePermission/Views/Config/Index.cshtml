@@ -1,9 +1,8 @@
 ﻿@model UserWidePermission.ViewModels.ConfigViewModel
-@using ModuleContracts.MVC
+@using Contracts.Razor
 @{
 	Layout = Html.GetAdminLayout();
 }
-@Html.InjectRequiredCodes()
 
 <div class="row">
 	<div class="col-lg-12">
@@ -22,7 +21,7 @@
 						<select id="module" class="form-control">
 							@foreach (var item in Model.Modules)
 							{
-								<option value="@item.ModuleName">@item.Title - @item.Description</option>
+								<option value="@item.Name">@item.Name - @item.Description</option>
 							}
 						</select>
 					</div>

@@ -61,7 +61,7 @@ namespace Modular
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 			services.AddHttpContextAccessor();
 
-			services.AddScoped<Configuration>();
+			services.AddSingleton<Configuration,Configuration>();
 
 			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 		}
@@ -137,7 +137,6 @@ namespace Modular
 					res.ParseAdditionalParameters(routeData.GetQueryString(req.Path));
 					var actionResult = Executer.InvokeAction(res, routeData, context);
 					context.Response.StatusCode = 200;
-
 					if (actionResult is ActionResult)
 						await (actionResult as ActionResult).ExecuteResultAsync(actionContext);
 					else if (actionResult == null)
@@ -183,6 +182,7 @@ namespace Modular
 		private void AddAdditionalInformationToContext(HttpContext context)
 		{
 			context.Items[Consts.CONTEXT_ITEM_KEY_THEME_LAYOUT_PATH] = Manager.ThemeLayoutPath;
+			context.Items[Consts.CONTEXT_ITEM_KEY_ADMIN_THEME_LAYOUT_PATH] = "~/Areas/_ModulesAdministration/Views/Shared/_Layout.cshtml";
 			context.Items[Consts.CONTEXT_ITEM_KEY_CREATOR] ="Yashar";
 		}
 
@@ -208,8 +208,9 @@ namespace Modular
 
 		public IEnumerable<ModuleManifest> GetModuleList() => Manager.ModuleManager.GetModules().Select(m => m.Manifest);
 
-		public User GetCurrentUser(HttpContext ctx)
+		public User GetCurrentUser()
 		{
+			var ctx = httpContextAccessor.HttpContext;
 			if (!(ctx.Items[Consts.CONTEXT_ITEM_KEY_AUTH] is Authentication auth))
 				return new User();
 			return auth.GetCurrentUser(ctx);

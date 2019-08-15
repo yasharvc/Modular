@@ -134,5 +134,13 @@ namespace Contracts.Hub
 			};
 			return pairs;
 		}
+
+		public static User GetCurrentUser(User debugUser = null)
+		{
+			if (IsModuleInDebugMode())
+				return debugUser;
+			else
+				return InvocationHubProvider.GetCurrentUser();
+		}
 	}
 }

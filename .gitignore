@@ -264,3 +264,4 @@ Modules/Module.MachineDefinition
 Modules/API.MachineWorkingInfo
 Modules/Module.MachineWorkingRecord
 Modules/Module.WorkUnitSubOperationAssignment
+Modules/Module.Operation
