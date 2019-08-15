@@ -4,6 +4,7 @@ using Contracts.Exceptions.System;
 using Contracts.Hub;
 using Contracts.Models;
 using Contracts.Module;
+using Dapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Hosting;
@@ -17,6 +18,7 @@ using Modular.Classes;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -29,7 +31,7 @@ namespace Modular
 		public static Manager.Manager Manager { get; } = new Manager.Manager();
 		private IHttpContextAccessor httpContextAccessor = null;
 
-		public event Delegates.UserInfoEventArg OnCurrentUserRequired;
+		public event UserInfoEventArg OnCurrentUserRequired;
 
 		public Startup(IConfiguration configuration)
 		{
@@ -37,6 +39,8 @@ namespace Modular
 		}
 		
 		public IConfiguration Configuration { get; }
+
+		public IServiceProvider ServiceProvider { get; private set; }
 
 		public void ConfigureServices(IServiceCollection services)
 		{
@@ -96,6 +100,7 @@ namespace Modular
 			httpContextAccessor = accessor;
 			SetupInvocationHubHandling();
 			AddAdditionalDataIntoManager();
+			ServiceProvider = app.ApplicationServices;
 		}
 
 		private void AddAdditionalDataIntoManager()
@@ -216,6 +221,15 @@ namespace Modular
 			if (res == null)
 				return null;
 			return new TypeConverter.TypeConverter(ReturnType.Assembly).Convert(res, ReturnType);
+		}
+
+		public IEnumerable<User> GetUsers()
+		{
+			var conf = ServiceProvider.GetRequiredService<Configuration>();
+			var connStr = conf.DataBaseConnectionString();
+			var conn = new SqlConnection(connStr);
+			var users = conn.Query<User>("SELECT ID,UserName,FullName FROM dbo.Users WHERE IsActive = 1");
+			return users;
 		}
 
 

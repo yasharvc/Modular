@@ -1,0 +1,120 @@
+﻿@model UserWidePermission.ViewModels.ConfigViewModel
+@using ModuleContracts.MVC
+@{
+	Layout = Html.GetAdminLayout();
+}
+@Html.InjectRequiredCodes()
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="card">
+			<div class="card-header">
+				<strong>تنظیمات امنیت کاربران</strong>
+			</div>
+			<div class="card-body card-block">
+				<div class="alert alert-success" role="alert" style="display:none;" id="success"></div>
+				<div class="alert alert-danger" role="alert" style="display:none;" id="error"></div>
+				<form method="post" class="row">
+
+					<div class="form-group col-md-6">
+
+						<label for="module" class="form-control-label">ماژول</label>
+						<select id="module" class="form-control">
+							@foreach (var item in Model.Modules)
+							{
+								<option value="@item.ModuleName">@item.Title - @item.Description</option>
+							}
+						</select>
+					</div>
+					<div class="form-group col-md-6">
+						<label for="nf-password" class=" form-control-label">کاربر</label>
+						<div class="input-group">
+							<select id="User" class="form-control">
+								@foreach (var item in Model.Users)
+								{
+									<option value="@item.ID">@item.FullName - @item.UserName</option>
+								}
+							</select>
+							<a class="input-group-addon" href="#" onclick="onLoad()">
+								<i class="fa fa-search"></i>
+							</a>
+						</div>
+					</div>
+					<hr />
+					<div class="form-group col-md-12">
+						<div class="row" id="permList">
+
+						</div>
+					</div>
+					<hr />
+				</form>
+			</div>
+			<div class="card-footer">
+				<button type="button" class="btn btn-primary btn-sm" onclick="onSave()">
+					<i class="fa fa-save"></i> ثبت
+				</button>
+				<button type="reset" class="btn btn-danger btn-sm">
+					<i class="fa fa-ban"></i> خالی کردن
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+<script>
+	var userID = null;
+	var moduleID = null;
+	function onLoad() {
+		moduleID = $('#module').val();
+		userID = $('#User').val();
+		$.getJSON({
+			url: 'GetUserPermissions',
+			data: {
+				moduleName: moduleID,
+				userID: userID
+			},
+			success: function (data) {
+				var template = '<div class="form-group list-group-item col-md-3">' +
+					'{title}' +
+					'<label class="switch" for="_{id}">' +
+					'<input type="checkbox" class="primary perm" name="_{id}" permid="{id}" id="_{id}" {checked}>' +
+					'<span class="slider round"></span></label></div >';
+				var html = '';
+				for (var i = 0; i < data.length; i++) {
+					var c = data[i];
+					var checked = c.data.value == null || c.data.value == false || parseInt(c.data.value) <= 0 ? "" : 'checked="checked"';
+					var str = template.replace(/{title}/g, c.permission.permissionTitle).replace(/{id}/g, c.permission.id).replace(/{checked}/g, checked);
+					html += str;
+				}
+				$('#permList').html(html);
+			}
+		});
+	}
+	function onSave() {
+		var perms = $('.perm');
+		var permsList = [];
+		$.each(perms, function (index, perm) {
+			permsList.push({
+				ID: -1,
+				PermissionID: parseInt($(perm).attr('permid')),
+				Value: $(perm).prop('checked') ? 1 : 0,
+				UserID: userID,
+			});
+		});
+		$.post({
+			url: 'SaveUserPermission',
+			data: { list: permsList },
+			success: function (data) {
+				if (data.result) {
+					$('#success').html('اطلاعات با موفقیت ثبت گردید').fadeIn();
+					setTimeout(function () { $('#success').fadeOut(); }, 2000);
+				} else {
+					$('#error').html('خطایی زمان ثبت رخ داد').fadeIn();
+					setTimeout(function () { $('#error').fadeOut(); }, 2000);
+				}
+			}
+		});
+	}
+</script>

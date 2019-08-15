@@ -22,9 +22,9 @@ namespace Contracts.Module
 		public string Token { get; set; }
 		public Version Version { get; set; }
 		public List<Dependency> Dependencies { get; set; } = new List<Dependency>();
-		public abstract Dictionary<string, BaseViewComponent> HomePageViewComponents { get; }
-		public abstract Dictionary<string, BaseViewComponent> ViewComponents { get; }
-		public abstract BaseViewComponent GetCustomViewComponent(string name);
+		public virtual Dictionary<string, BaseViewComponent> HomePageViewComponents { get; } = new Dictionary<string, BaseViewComponent>();
+		public virtual Dictionary<string, BaseViewComponent> ViewComponents { get; } = new Dictionary<string, BaseViewComponent>();
+		public virtual BaseViewComponent GetCustomViewComponent(string name) => null;
 		public virtual IEnumerable<IMenu> Menus { get; } = new List<IMenu>();
 		public virtual IEnumerable<IMenu> AdminMenu { get; } = new List<IMenu>();
 		public ModuleStatus Status { get; set; } = ModuleStatus.Disable;

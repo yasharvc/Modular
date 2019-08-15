@@ -3,10 +3,7 @@ using System.Collections.Generic;
 
 namespace Contracts
 {
-	public class Delegates
-	{
-		public delegate string StringToString(string input);
-		public delegate User UserInfoEventArg();
-		public delegate Dictionary<string, string> StringToStringDictionarryArgs();
-	}
+	public delegate string StringToString(string input);
+	public delegate User UserInfoEventArg();
+	public delegate Dictionary<string, string> StringToStringDictionarryArgs();
 }

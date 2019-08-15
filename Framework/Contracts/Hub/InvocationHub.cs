@@ -1,4 +1,5 @@
-﻿using Contracts.Module;
+﻿using Contracts.Models;
+using Contracts.Module;
 using Contracts.Security;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -33,6 +34,14 @@ namespace Contracts.Hub
 				return HttpPost(BaseUri, GetConnectionStringPath, new List<KeyValuePair<string, string>>());
 			else
 				return InvocationHubProvider.GetConnectionString();
+		}
+
+		public static IEnumerable<User> GetUsers()
+		{
+			if (IsModuleInDebugMode())
+				return JsonConvert.DeserializeObject<IEnumerable<User>>(HttpPost(BaseUri, GetUsersPath));
+			else
+			return InvocationHubProvider.GetUsers();
 		}
 
 		private static string HttpPost(string BaseUrl, string FunctionPath, List<KeyValuePair<string, string>> parameters = null)

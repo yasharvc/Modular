@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using static Contracts.Delegates;
 
 namespace ModulesFileUploader
 {
