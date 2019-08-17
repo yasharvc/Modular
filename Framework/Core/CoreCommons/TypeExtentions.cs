@@ -36,7 +36,7 @@ namespace CoreCommons
 
 		private static object ConvertProperty(Type resType, List<RequestParameter> parameters,string propertyName, Assembly assembly = null,string name = "")
 		{
-			if (resType.IsPrimitiveType())
+			if (resType.IsPrimitiveType() || resType == typeof(DateTime))
 			{
 				object obj = null;
 				try

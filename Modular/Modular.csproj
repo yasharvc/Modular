@@ -3210,6 +3210,13 @@
     <None Include="wwwroot\assets\pages\scripts\v,..min.js" />
     <None Include="wwwroot\assets\pages\scripts\widgets.js" />
     <None Include="wwwroot\assets\pages\scripts\widgets.min.js" />
+    <None Include="wwwroot\Scripts\Files\lib\jquery-ui.min.js" />
+    <None Include="wwwroot\Scripts\Files\lib\jquery.min.js" />
+    <None Include="wwwroot\Scripts\Files\lib\jquery\jquery-1.12.0.min.js" />
+    <None Include="wwwroot\Scripts\Files\lib\jquery\jquery-2.1.4.min.js" />
+    <None Include="wwwroot\Scripts\Files\lib\jquery\jquery-2.2.0.min.js" />
+    <None Include="wwwroot\Scripts\Files\lib\moment-jalaali.js" />
+    <None Include="wwwroot\Scripts\Files\lib\moment.min.js" />
     <None Include="wwwroot\Validation\equipment-validation.js" />
     <None Include="wwwroot\Validation\equipment-validation.min.js" />
     <None Include="wwwroot\Validation\machine-validation.js" />
