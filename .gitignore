@@ -265,3 +265,4 @@ Modules/API.MachineWorkingInfo
 Modules/Module.MachineWorkingRecord
 Modules/Module.WorkUnitSubOperationAssignment
 Modules/Module.Operation
+Modules/Module.TechnicalCharacteristic
